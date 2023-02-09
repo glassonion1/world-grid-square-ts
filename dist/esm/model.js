@@ -1,5 +1,7 @@
-export const unitLat = 40 / 60;
-export const unitLng = 1;
+export const Unit = {
+    lng: 1,
+    lat: 40 / 60
+};
 export const toLength = (level) => {
     switch (level) {
         case 1:

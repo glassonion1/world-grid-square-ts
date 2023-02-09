@@ -1,4 +1,4 @@
-import { Grid, unitLng, unitLat } from './model'
+import { Grid, Unit } from './model'
 
 const divideGrid = (
   lng: number,
@@ -40,8 +40,8 @@ const toLv1 = (lng: number, lat: number): Grid => {
   const z = -100 < lng && lng <= 100 ? 0 : 1
   const o = 2 * x + 4 * y + z + 1
 
-  const h = unitLat
-  const w = unitLng
+  const w = Unit.lng
+  const h = Unit.lat
 
   const p = Math.floor(Math.abs(lat) / h)
   const padP = String(p).padStart(3, '0')

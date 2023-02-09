@@ -1,4 +1,4 @@
-import { unitLng, unitLat, toLength, toLevel } from './model';
+import { Unit, toLength, toLevel } from './model';
 const toGrid = (grid, level, divide) => {
     const len = toLength(level);
     const code = grid.code;
@@ -28,13 +28,13 @@ const toLv1Pos = (code) => {
     const y = (o - 2 * x - z - 1) / 4;
     const codeY = (1 - 2 * y) * Number(code.substring(1, 4));
     const codeX = (1 - 2 * x) * Number(code.substring(4, 6));
-    const south = codeY * unitLat;
-    const west = codeX * unitLng + 100 * z;
+    const south = codeY * Unit.lat;
+    const west = codeX * Unit.lng + 100 * z;
     return {
         west: west,
         south: south,
-        width: unitLng,
-        height: unitLat,
+        width: Unit.lng,
+        height: Unit.lat,
         code: code
     };
 };
@@ -58,7 +58,7 @@ const toLv6Pos = (code) => {
     const lv5 = toLv5Pos(code);
     return toGrid(lv5, 6, 2);
 };
-export const toPosition = (code, anchor = 0.0) => {
+export const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const funcs = {
         1: toLv1Pos,
         2: toLv2Pos,
@@ -73,7 +73,17 @@ export const toPosition = (code, anchor = 0.0) => {
     const digit = 14;
     const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
     const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
-    const lng = w + anchor * g.width;
-    const lat = s + anchor * g.height;
+    const lng = w + anchorX * g.width;
+    const lat = s + anchorY * g.height;
     return { lng: lng, lat: lat };
+};
+export const toBbox = (code) => {
+    const ws = toPoint(code, 0, 0);
+    const en = toPoint(code, 1, 1);
+    return {
+        west: ws.lng,
+        south: ws.lat,
+        east: en.lng,
+        north: en.lat
+    };
 };

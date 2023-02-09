@@ -1,4 +1,4 @@
-import { unitLng, unitLat } from './model';
+import { Unit } from './model';
 const divideGrid = (lng, lat, parent, divide) => {
     const h = parent.height / divide;
     const w = parent.width / divide;
@@ -25,8 +25,8 @@ const toLv1 = (lng, lat) => {
     const y = lat > 0 ? 0 : 1;
     const z = -100 < lng && lng <= 100 ? 0 : 1;
     const o = 2 * x + 4 * y + z + 1;
-    const h = unitLat;
-    const w = unitLng;
+    const w = Unit.lng;
+    const h = Unit.lat;
     const p = Math.floor(Math.abs(lat) / h);
     const padP = String(p).padStart(3, '0');
     const u = Math.floor(Math.abs(lng) - 100 * z);

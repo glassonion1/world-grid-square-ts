@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toPosition = void 0;
+exports.toBbox = exports.toPoint = void 0;
 const model_1 = require("./model");
 const toGrid = (grid, level, divide) => {
     const len = (0, model_1.toLength)(level);
@@ -31,13 +31,13 @@ const toLv1Pos = (code) => {
     const y = (o - 2 * x - z - 1) / 4;
     const codeY = (1 - 2 * y) * Number(code.substring(1, 4));
     const codeX = (1 - 2 * x) * Number(code.substring(4, 6));
-    const south = codeY * model_1.unitLat;
-    const west = codeX * model_1.unitLng + 100 * z;
+    const south = codeY * model_1.Unit.lat;
+    const west = codeX * model_1.Unit.lng + 100 * z;
     return {
         west: west,
         south: south,
-        width: model_1.unitLng,
-        height: model_1.unitLat,
+        width: model_1.Unit.lng,
+        height: model_1.Unit.lat,
         code: code
     };
 };
@@ -61,7 +61,7 @@ const toLv6Pos = (code) => {
     const lv5 = toLv5Pos(code);
     return toGrid(lv5, 6, 2);
 };
-const toPosition = (code, anchor = 0.0) => {
+const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const funcs = {
         1: toLv1Pos,
         2: toLv2Pos,
@@ -76,8 +76,19 @@ const toPosition = (code, anchor = 0.0) => {
     const digit = 14;
     const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
     const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
-    const lng = w + anchor * g.width;
-    const lat = s + anchor * g.height;
+    const lng = w + anchorX * g.width;
+    const lat = s + anchorY * g.height;
     return { lng: lng, lat: lat };
 };
-exports.toPosition = toPosition;
+exports.toPoint = toPoint;
+const toBbox = (code) => {
+    const ws = (0, exports.toPoint)(code, 0, 0);
+    const en = (0, exports.toPoint)(code, 1, 1);
+    return {
+        west: ws.lng,
+        south: ws.lat,
+        east: en.lng,
+        north: en.lat
+    };
+};
+exports.toBbox = toBbox;

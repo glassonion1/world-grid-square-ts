@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toLevel = exports.toLength = exports.unitLng = exports.unitLat = void 0;
-exports.unitLat = 40 / 60;
-exports.unitLng = 1;
+exports.toLevel = exports.toLength = exports.Unit = void 0;
+exports.Unit = {
+    lng: 1,
+    lat: 40 / 60
+};
 const toLength = (level) => {
     switch (level) {
         case 1:

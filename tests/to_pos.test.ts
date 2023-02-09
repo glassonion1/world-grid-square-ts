@@ -1,4 +1,4 @@
-import { toPosition } from '../src'
+import { toBbox, toPoint } from '../src'
 
 const cases = [
   {
@@ -150,8 +150,18 @@ const cases = [
 describe('run tests', () => {
   cases.forEach((c) => {
     it(c.label, () => {
-      expect(toPosition(c.code)).toStrictEqual(c.ws)
-      expect(toPosition(c.code, 0.5)).toStrictEqual(c.center)
+      expect(toPoint(c.code)).toStrictEqual(c.ws)
+      expect(toPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
     })
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: 135.7578125,
+      south: 34.9875,
+      east: 135.759375,
+      north: 34.98854166666666
+    }
+    expect(toBbox('2052353680412')).toStrictEqual(bbox)
   })
 })

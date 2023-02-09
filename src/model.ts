@@ -1,5 +1,7 @@
-export const unitLat = 40 / 60
-export const unitLng = 1
+export const Unit = {
+  lng: 1,
+  lat: 40 / 60
+} as const
 
 export interface Grid {
   west: number
@@ -7,6 +9,18 @@ export interface Grid {
   width: number
   height: number
   code: string
+}
+
+export interface Bbox {
+  west: number
+  south: number
+  east: number
+  north: number
+}
+
+export interface Point {
+  lng: number
+  lat: number
 }
 
 export const toLength = (level: number): number => {

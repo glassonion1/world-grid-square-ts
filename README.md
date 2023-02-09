@@ -19,3 +19,21 @@ or
 ```
 $ yarn add world-grid-square
 ```
+
+## Usage
+from longitude and latitude to code
+```ts
+import wgs from 'world-grid-square'
+
+const code = wgs.toCode(139.745433, 35.658581, 6)
+// 2053393599212
+console.log(code)
+```
+from code to longitude and latitude
+```ts
+import wgs from 'world-grid-square'
+
+const point = wgs.toPoint('2053393599212')
+// 139.7453125, 35.65833333333333
+console.log(point)
+```
