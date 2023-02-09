@@ -24,11 +24,15 @@ const toGrid = (grid, level, divide) => {
         code: code
     };
 };
-const toLv1Pos = (code) => {
+const xyz = (code) => {
     const o = Number(code[0]);
     const z = (o - 1) % 2;
     const x = ((o - z - 1) / 2) % 2;
     const y = (o - 2 * x - z - 1) / 4;
+    return [x, y, z];
+};
+const toLv1Pos = (code) => {
+    const [x, y, z] = xyz(code);
     const codeY = (1 - 2 * y) * Number(code.substring(1, 4));
     const codeX = (1 - 2 * x) * Number(code.substring(4, 6));
     const south = codeY * model_1.Unit.lat;
@@ -76,8 +80,9 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const digit = 14;
     const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
     const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
-    const lng = w + anchorX * g.width;
-    const lat = s + anchorY * g.height;
+    const [x, y] = xyz(code);
+    const lng = w + anchorX * g.width * (1 - 2 * x);
+    const lat = s + anchorY * g.height * (1 - 2 * y);
     return { lng: lng, lat: lat };
 };
 exports.toPoint = toPoint;

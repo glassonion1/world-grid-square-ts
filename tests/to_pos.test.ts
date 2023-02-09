@@ -1,4 +1,4 @@
-import { toBbox, toPoint } from '../src'
+import wgs from '../src'
 
 const cases = [
   {
@@ -150,8 +150,8 @@ const cases = [
 describe('run tests', () => {
   cases.forEach((c) => {
     it(c.label, () => {
-      expect(toPoint(c.code)).toStrictEqual(c.ws)
-      expect(toPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
+      expect(wgs.toPoint(c.code)).toStrictEqual(c.ws)
+      expect(wgs.toPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
     })
   })
 
@@ -162,6 +162,6 @@ describe('run tests', () => {
       east: 135.759375,
       north: 34.98854166666666
     }
-    expect(toBbox('2052353680412')).toStrictEqual(bbox)
+    expect(wgs.toBbox('2052353680412')).toStrictEqual(bbox)
   })
 })

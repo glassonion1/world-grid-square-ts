@@ -1,4 +1,4 @@
-import { toCode } from '../src'
+import wgs from '../src'
 
 const tokyoTower = [139.745433, 35.658581]
 const kyotoTower = [135.759363, 34.987574]
@@ -136,7 +136,7 @@ const cases = [
 describe('run tests', () => {
   it('test toCode', () => {
     cases.forEach((c) => {
-      expect(toCode(c.lng, c.lat, c.level)).toBe(c.want)
+      expect(wgs.toCode(c.lng, c.lat, c.level)).toBe(c.want)
     })
   })
 })
