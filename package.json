@@ -18,7 +18,12 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "grid",
+    "longitude",
+    "latitude",
+    "geocode"
+  ],
   "author": "glassonion1",
   "license": "MIT",
   "devDependencies": {
