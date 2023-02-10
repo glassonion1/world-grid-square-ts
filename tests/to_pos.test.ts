@@ -164,4 +164,23 @@ describe('run tests', () => {
     }
     expect(wgs.toBbox('2052353680412')).toStrictEqual(bbox)
   })
+  /*
+  it('test toBbox', () => {
+    const code = wgs.toCode(-118.2436, 34.0522, 6)
+    const bbox = wgs.toBbox(code)
+    console.log(bbox)
+  })*/
+  it('test toBbox', () => {
+    const code = wgs.toCode(-118.2661966, 34.0292676, 2)
+    const bbox = wgs.toBbox(code)
+    console.log(bbox)
+    expect(wgs.toCode(-118.2661966, 34.0292676, 2)).toBe('40511802')
+    //expect(code).toBe('4051180231321')
+  })
+  /*
+  it('test toBbox', () => {
+    const code = wgs.toCode(82.75625, 34.0522, 6)
+    const bbox = wgs.toBbox(code)
+    console.log(bbox)
+  })*/
 })

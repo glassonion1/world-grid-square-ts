@@ -23,6 +23,26 @@ export interface Point {
   lat: number
 }
 
+export const parseFirstDigit = (code: string): number[] => {
+  const o = Number(code[0])
+  const z = (o - 1) % 2
+  const x = ((o - z - 1) / 2) % 2
+  const y = (o - 2 * x - z - 1) / 4
+
+  const signX = 1 - 2 * x
+  const signY = 1 - 2 * y
+
+  return [signX, signY, z]
+}
+
+export const toFirstDigit = (lng: number, lat: number): number => {
+  const x = lng > 0 ? 0 : 1
+  const y = lat > 0 ? 0 : 1
+  const z = -100 < lng && lng <= 100 ? 0 : 1
+
+  return 2 * x + 4 * y + z + 1
+}
+
 export const toLength = (level: number): number => {
   switch (level) {
     case 1:

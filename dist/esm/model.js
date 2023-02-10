@@ -2,6 +2,13 @@ export const Unit = {
     lng: 1,
     lat: 40 / 60
 };
+export const toXyz = (code) => {
+    const o = Number(code[0]);
+    const z = (o - 1) % 2;
+    const x = ((o - z - 1) / 2) % 2;
+    const y = (o - 2 * x - z - 1) / 4;
+    return [x, y, z];
+};
 export const toLength = (level) => {
     switch (level) {
         case 1:

@@ -1,4 +1,12 @@
-import { Grid, Point, Bbox, Unit, toLength, toLevel } from './model'
+import {
+  Grid,
+  Point,
+  Bbox,
+  Unit,
+  toLength,
+  toLevel,
+  parseFirstDigit
+} from './model'
 
 const toGrid = (grid: Grid, level: number, divide: number): Grid => {
   const len = toLength(level)
@@ -8,15 +16,17 @@ const toGrid = (grid: Grid, level: number, divide: number): Grid => {
   let x = Number(code[len - 1])
   if (divide == 2) {
     const c = Number(code[len - 1]) - 1
-    y = Math.floor(c / 2)
+    y = Math.trunc(c / 2)
     x = c % 2
   }
 
   const h = grid.height / divide
   const w = grid.width / divide
 
-  const south = grid.south + y * h
-  const west = grid.west + x * w
+  const [signX, signY] = parseFirstDigit(code)
+
+  const south = grid.south + y * h * signY
+  const west = grid.west + x * w * signX
 
   return {
     west: west,
@@ -27,23 +37,14 @@ const toGrid = (grid: Grid, level: number, divide: number): Grid => {
   }
 }
 
-const xyz = (code: string): number[] => {
-  const o = Number(code[0])
-  const z = (o - 1) % 2
-  const x = ((o - z - 1) / 2) % 2
-  const y = (o - 2 * x - z - 1) / 4
-
-  return [x, y, z]
-}
-
 const toLv1Pos = (code: string): Grid => {
-  const [x, y, z] = xyz(code)
+  const [signX, signY, z] = parseFirstDigit(code)
 
-  const codeY = (1 - 2 * y) * Number(code.substring(1, 4))
-  const codeX = (1 - 2 * x) * Number(code.substring(4, 6))
+  const y = Number(code.substring(1, 4))
+  const x = Number(code.substring(4, 6))
 
-  const south = codeY * Unit.lat
-  const west = codeX * Unit.lng + 100 * z
+  const south = y * Unit.lat * signY
+  const west = (x * Unit.lng + 100 * z) * signX
 
   return {
     west: west,
@@ -103,10 +104,10 @@ export const toPoint = (
   const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit)
   const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit)
 
-  const [x, y] = xyz(code)
+  const [signX, signY] = parseFirstDigit(code)
 
-  const lng = w + anchorX * g.width * (1 - 2 * x)
-  const lat = s + anchorY * g.height * (1 - 2 * y)
+  const lng = w + anchorX * g.width * signX
+  const lat = s + anchorY * g.height * signY
 
   return { lng: lng, lat: lat }
 }

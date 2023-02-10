@@ -1,17 +1,19 @@
-import { Unit } from './model';
+import { Unit, toXyz } from './model';
 const divideGrid = (lng, lat, parent, divide) => {
     const h = parent.height / divide;
     const w = parent.width / divide;
-    const y = Math.floor((lat - parent.south) / h);
-    const x = Math.floor((lng - parent.west) / w);
-    let end = `${y}${x}`;
+    const codey = Math.trunc((lat - parent.south) / h);
+    const codex = Math.abs(Math.trunc((lng - parent.west) / w));
+    let end = `${codey}${codex}`;
     if (parent.code.length >= 10) {
         // south-west=1, south-east=2, north-west=3, north-east=4
-        end = `${2 * y + x + 1}`;
+        end = `${2 * codey + codex + 1}`;
     }
     const code = `${parent.code}${end}`;
-    const south = parent.south + y * h;
-    const west = parent.west + x * w;
+    const [x, y, z] = toXyz(code);
+    const dx = 1 - 2 * x;
+    const south = parent.south + codey * h;
+    const west = parent.west + codex * w * dx;
     return { west: west, south: south, width: w, height: h, code: code };
 };
 const toLv1 = (lng, lat) => {
@@ -27,13 +29,13 @@ const toLv1 = (lng, lat) => {
     const o = 2 * x + 4 * y + z + 1;
     const w = Unit.lng;
     const h = Unit.lat;
-    const p = Math.floor(Math.abs(lat) / h);
+    const p = Math.trunc(Math.abs(lat) / h);
     const padP = String(p).padStart(3, '0');
-    const u = Math.floor(Math.abs(lng) - 100 * z);
-    const padU = String(Math.floor(u)).padStart(2, '0');
+    const u = Math.trunc(Math.abs(lng) - 100 * z);
+    const padU = String(Math.trunc(u)).padStart(2, '0');
     const code = `${o}${padP}${padU}`;
-    const south = Math.floor(lat / h) * h;
-    const west = Math.floor(lng);
+    const south = Math.trunc(lat / h) * h;
+    const west = Math.trunc(lng);
     return { west: west, south: south, width: w, height: h, code: code };
 };
 const toLv2 = (lng, lat) => {

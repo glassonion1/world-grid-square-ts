@@ -134,9 +134,26 @@ const cases = [
 ]
 
 describe('run tests', () => {
-  it('test toCode', () => {
-    cases.forEach((c) => {
+  cases.forEach((c) => {
+    it(c.label, () => {
       expect(wgs.toCode(c.lng, c.lat, c.level)).toBe(c.want)
     })
+  })
+
+  it('test east longitude', () => {
+    expect(wgs.toCode(139.6982122, 35.6640352, 1)).toBe('205339')
+    expect(wgs.toCode(139.6982122, 35.6640352, 2)).toBe('20533935')
+    expect(wgs.toCode(139.6982122, 35.6640352, 3)).toBe('2053393595')
+    expect(wgs.toCode(139.6982122, 35.6640352, 4)).toBe('20533935954')
+    expect(wgs.toCode(139.6982122, 35.6640352, 5)).toBe('205339359542')
+    expect(wgs.toCode(139.6982122, 35.6640352, 6)).toBe('2053393595423')
+  })
+  it('test west longitude', () => {
+    expect(wgs.toCode(-118.2661966, 34.0292676, 1)).toBe('405118')
+    expect(wgs.toCode(-118.2661966, 34.0292676, 2)).toBe('40511802')
+    expect(wgs.toCode(-118.2661966, 34.0292676, 3)).toBe('4051180231')
+    expect(wgs.toCode(-118.2661966, 34.0292676, 4)).toBe('40511802313')
+    expect(wgs.toCode(-118.2661966, 34.0292676, 5)).toBe('405118023132')
+    expect(wgs.toCode(-118.2661966, 34.0292676, 6)).toBe('4051180231321')
   })
 })
