@@ -25,7 +25,7 @@ const divideGrid = (
   const h = parent.height / divide
   const w = parent.width / divide
 
-  const codey = Math.trunc((lat - parent.south) / h)
+  const codey = Math.abs(Math.trunc((lat - parent.south) / h))
   const codex = Math.abs(Math.trunc((lng - parent.west) / w))
 
   let end = `${codey}${codex}`

@@ -160,7 +160,7 @@ describe('run tests', () => {
   })
 
   const london = [-0.1109842, 51.5116861]
-  it('test west longitude adn north latitude', () => {
+  it('test west longitude and north latitude', () => {
     expect(wgs.toCode(london[0], london[1], 1)).toBe('307700')
     expect(wgs.toCode(london[0], london[1], 2)).toBe('30770020')
     expect(wgs.toCode(london[0], london[1], 3)).toBe('3077002018')
@@ -170,12 +170,22 @@ describe('run tests', () => {
   })
 
   const sanFran = [-122.4080423, 37.7614263]
-  it('test west longitude adn north latitude', () => {
+  it('test west longitude and north latitude', () => {
     expect(wgs.toCode(sanFran[0], sanFran[1], 1)).toBe('405622')
     expect(wgs.toCode(sanFran[0], sanFran[1], 2)).toBe('40562253')
     expect(wgs.toCode(sanFran[0], sanFran[1], 3)).toBe('4056225312')
     expect(wgs.toCode(sanFran[0], sanFran[1], 4)).toBe('40562253122')
     expect(wgs.toCode(sanFran[0], sanFran[1], 5)).toBe('405622531223')
     expect(wgs.toCode(sanFran[0], sanFran[1], 6)).toBe('4056225312232')
+  })
+
+  const capeTown = [18.4311911, -33.9166467]
+  it('test east longitude and south latitude', () => {
+    expect(wgs.toCode(capeTown[0], capeTown[1], 1)).toBe('505018')
+    expect(wgs.toCode(capeTown[0], capeTown[1], 2)).toBe('50501863')
+    expect(wgs.toCode(capeTown[0], capeTown[1], 3)).toBe('5050186394')
+    expect(wgs.toCode(capeTown[0], capeTown[1], 4)).toBe('50501863943')
+    expect(wgs.toCode(capeTown[0], capeTown[1], 5)).toBe('505018639434')
+    expect(wgs.toCode(capeTown[0], capeTown[1], 6)).toBe('5050186394344')
   })
 })
