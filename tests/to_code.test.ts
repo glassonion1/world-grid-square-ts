@@ -188,4 +188,34 @@ describe('run tests', () => {
     expect(wgs.toCode(capeTown[0], capeTown[1], 5)).toBe('505018639434')
     expect(wgs.toCode(capeTown[0], capeTown[1], 6)).toBe('5050186394344')
   })
+
+  const sydney = [151.3218161, -33.8345541]
+  it('test east longitude and south latitude', () => {
+    expect(wgs.toCode(sydney[0], sydney[1], 1)).toBe('605051')
+    expect(wgs.toCode(sydney[0], sydney[1], 2)).toBe('60505162')
+    expect(wgs.toCode(sydney[0], sydney[1], 3)).toBe('6050516205')
+    expect(wgs.toCode(sydney[0], sydney[1], 4)).toBe('60505162052')
+    expect(wgs.toCode(sydney[0], sydney[1], 5)).toBe('605051620521')
+    expect(wgs.toCode(sydney[0], sydney[1], 6)).toBe('6050516205214')
+  })
+
+  const rio = [-43.2240823, -23.0400003]
+  it('test west longitude and south latitude', () => {
+    expect(wgs.toCode(rio[0], rio[1], 1)).toBe('703443')
+    expect(wgs.toCode(rio[0], rio[1], 2)).toBe('70344341')
+    expect(wgs.toCode(rio[0], rio[1], 3)).toBe('7034434147')
+    expect(wgs.toCode(rio[0], rio[1], 4)).toBe('70344341474')
+    expect(wgs.toCode(rio[0], rio[1], 5)).toBe('703443414744')
+    expect(wgs.toCode(rio[0], rio[1], 6)).toBe('7034434147442')
+  })
+
+  const tahiti = [-149.5758584, -17.5364235]
+  it('test west longitude and south latitude', () => {
+    expect(wgs.toCode(tahiti[0], tahiti[1], 1)).toBe('802649')
+    expect(wgs.toCode(tahiti[0], tahiti[1], 2)).toBe('80264924')
+    expect(wgs.toCode(tahiti[0], tahiti[1], 3)).toBe('8026492446')
+    expect(wgs.toCode(tahiti[0], tahiti[1], 4)).toBe('80264924461')
+    expect(wgs.toCode(tahiti[0], tahiti[1], 5)).toBe('802649244613')
+    expect(wgs.toCode(tahiti[0], tahiti[1], 6)).toBe('8026492446131')
+  })
 })
