@@ -2,12 +2,20 @@ export const Unit = {
     lng: 1,
     lat: 40 / 60
 };
-export const toXyz = (code) => {
+export const parseFirstDigit = (code) => {
     const o = Number(code[0]);
     const z = (o - 1) % 2;
     const x = ((o - z - 1) / 2) % 2;
     const y = (o - 2 * x - z - 1) / 4;
-    return [x, y, z];
+    const signX = 1 - 2 * x;
+    const signY = 1 - 2 * y;
+    return [signX, signY, z];
+};
+export const toFirstDigit = (lng, lat) => {
+    const x = lng > 0 ? 0 : 1;
+    const y = lat > 0 ? 0 : 1;
+    const z = -100 < lng && lng <= 100 ? 0 : 1;
+    return 2 * x + 4 * y + z + 1;
 };
 export const toLength = (level) => {
     switch (level) {

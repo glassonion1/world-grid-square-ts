@@ -1,4 +1,20 @@
-import { Grid, Unit, parseFirstDigit, toFirstDigit } from './model'
+import { Grid, Unit, parseFirstDigit } from './model'
+
+export const toFirstDigit = (lng: number, lat: number): number => {
+  if (lng <= -180 || 180 < lng) {
+    throw new RangeError(`Longitude is out of bound: ${lng}`)
+  }
+
+  if (lat < -90 || 90 < lat) {
+    throw new RangeError(`Latitude is out of bound: ${lat}`)
+  }
+
+  const x = lng > 0 ? 0 : 1
+  const y = lat > 0 ? 0 : 1
+  const z = -100 < lng && lng <= 100 ? 0 : 1
+
+  return 2 * x + 4 * y + z + 1
+}
 
 const divideGrid = (
   lng: number,
@@ -29,14 +45,6 @@ const divideGrid = (
 }
 
 const toLv1 = (lng: number, lat: number): Grid => {
-  if (lng <= -180 || 180 < lng) {
-    throw new RangeError(`Longitude is out of bound: ${lng}`)
-  }
-
-  if (lat < -90 || 90 < lat) {
-    throw new RangeError(`Latitude is out of bound: ${lat}`)
-  }
-
   const o = toFirstDigit(lng, lat)
 
   const w = Unit.lng

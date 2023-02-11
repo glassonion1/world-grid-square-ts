@@ -5,18 +5,18 @@ const model_1 = require("./model");
 const toGrid = (grid, level, divide) => {
     const len = (0, model_1.toLength)(level);
     const code = grid.code;
-    let codey = Number(code[len - 2]);
-    let codex = Number(code[len - 1]);
+    let y = Number(code[len - 2]);
+    let x = Number(code[len - 1]);
     if (divide == 2) {
         const c = Number(code[len - 1]) - 1;
-        codey = Math.floor(c / 2);
-        codex = c % 2;
+        y = Math.trunc(c / 2);
+        x = c % 2;
     }
     const h = grid.height / divide;
     const w = grid.width / divide;
-    const [x, y] = (0, model_1.toXyz)(code);
-    const south = grid.south + codey * h * (1 - 2 * y);
-    const west = grid.west + codex * w * (1 - 2 * x);
+    const [signX, signY] = (0, model_1.parseFirstDigit)(code);
+    const south = grid.south + y * h * signY;
+    const west = grid.west + x * w * signX;
     return {
         west: west,
         south: south,
@@ -26,11 +26,11 @@ const toGrid = (grid, level, divide) => {
     };
 };
 const toLv1Pos = (code) => {
-    const [x, y, z] = (0, model_1.toXyz)(code);
-    const codey = (1 - 2 * y) * Number(code.substring(1, 4));
-    const codex = (1 - 2 * x) * Number(code.substring(4, 6));
-    const south = codey * model_1.Unit.lat;
-    const west = codex * model_1.Unit.lng + 100 * z * (1 - 2 * x);
+    const [signX, signY, z] = (0, model_1.parseFirstDigit)(code);
+    const y = Number(code.substring(1, 4));
+    const x = Number(code.substring(4, 6));
+    const south = y * model_1.Unit.lat * signY;
+    const west = (x * model_1.Unit.lng + 100 * z) * signX;
     return {
         west: west,
         south: south,
@@ -74,9 +74,9 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const digit = 14;
     const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
     const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
-    const [x, y] = (0, model_1.toXyz)(code);
-    const lng = w + anchorX * g.width * (1 - 2 * x);
-    const lat = s + anchorY * g.height * (1 - 2 * y);
+    const [signX, signY] = (0, model_1.parseFirstDigit)(code);
+    const lng = w + anchorX * g.width * signX;
+    const lat = s + anchorY * g.height * signY;
     return { lng: lng, lat: lat };
 };
 exports.toPoint = toPoint;

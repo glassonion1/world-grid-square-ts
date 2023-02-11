@@ -13,10 +13,9 @@ const divideGrid = (lng, lat, parent, divide) => {
         end = `${2 * codey + codex + 1}`;
     }
     const code = `${parent.code}${end}`;
-    const [x, y, z] = (0, model_1.toXyz)(code);
-    const dx = 1 - 2 * x;
-    const south = parent.south + codey * h;
-    const west = parent.west + codex * w * dx;
+    const [signX, signY] = (0, model_1.parseFirstDigit)(code);
+    const south = parent.south + codey * h * signY;
+    const west = parent.west + codex * w * signX;
     return { west: west, south: south, width: w, height: h, code: code };
 };
 const toLv1 = (lng, lat) => {
@@ -26,16 +25,14 @@ const toLv1 = (lng, lat) => {
     if (lat < -90 || 90 < lat) {
         throw new RangeError(`Latitude is out of bound: ${lat}`);
     }
-    const x = lng > 0 ? 0 : 1;
-    const y = lat > 0 ? 0 : 1;
-    const z = -100 < lng && lng <= 100 ? 0 : 1;
-    const o = 2 * x + 4 * y + z + 1;
+    const o = (0, model_1.toFirstDigit)(lng, lat);
     const w = model_1.Unit.lng;
     const h = model_1.Unit.lat;
     const p = Math.trunc(Math.abs(lat) / h);
     const padP = String(p).padStart(3, '0');
-    const u = Math.trunc(Math.abs(lng) - 100 * z);
-    const padU = String(Math.trunc(u)).padStart(2, '0');
+    // Extract the last two digits of the integer part
+    const u = Math.trunc(Math.abs(lng)) % 100;
+    const padU = String(u).padStart(2, '0');
     const code = `${o}${padP}${padU}`;
     const south = Math.trunc(lat / h) * h;
     const west = Math.trunc(lng);

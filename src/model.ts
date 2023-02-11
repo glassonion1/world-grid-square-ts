@@ -35,14 +35,6 @@ export const parseFirstDigit = (code: string): number[] => {
   return [signX, signY, z]
 }
 
-export const toFirstDigit = (lng: number, lat: number): number => {
-  const x = lng > 0 ? 0 : 1
-  const y = lat > 0 ? 0 : 1
-  const z = -100 < lng && lng <= 100 ? 0 : 1
-
-  return 2 * x + 4 * y + z + 1
-}
-
 export const toLength = (level: number): number => {
   switch (level) {
     case 1:
