@@ -4,6 +4,7 @@ export const Unit = {
 } as const
 
 export interface Grid {
+  // FIXME: west south is wrong name. basis lng lat
   west: number
   south: number
   width: number

@@ -106,8 +106,16 @@ export const toPoint = (
 
   const [signX, signY] = parseFirstDigit(code)
 
-  const lng = w + anchorX * g.width * signX
-  const lat = s + anchorY * g.height * signY
+  if (signX < 0) {
+    anchorX -= 1
+  }
+
+  if (signY < 0) {
+    anchorY -= 1
+  }
+
+  const lng = w + anchorX * g.width
+  const lat = s + anchorY * g.height
 
   return { lng: lng, lat: lat }
 }

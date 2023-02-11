@@ -157,6 +157,16 @@ describe('run tests', () => {
 
   it('test toBbox', () => {
     const bbox = {
+      west: 77.20625,
+      south: 28.61458333333333,
+      east: 77.2078125,
+      north: 28.615624999999994
+    }
+    expect(wgs.toBbox('1042777136431')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
       west: 135.7578125,
       south: 34.9875,
       east: 135.759375,
@@ -164,23 +174,34 @@ describe('run tests', () => {
     }
     expect(wgs.toBbox('2052353680412')).toStrictEqual(bbox)
   })
-  /*
+
   it('test toBbox', () => {
-    const code = wgs.toCode(-118.2436, 34.0522, 6)
-    const bbox = wgs.toBbox(code)
-    console.log(bbox)
-  })*/
-  it('test toBbox', () => {
-    const code = wgs.toCode(-118.2661966, 34.0292676, 2)
-    const bbox = wgs.toBbox(code)
-    console.log(bbox)
-    expect(wgs.toCode(-118.2661966, 34.0292676, 2)).toBe('40511802')
-    //expect(code).toBe('4051180231321')
+    const bbox = {
+      west: -1,
+      south: 51.33333333333333,
+      east: 0,
+      north: 51.99999999999999
+    }
+    expect(wgs.toBbox('307700')).toStrictEqual(bbox)
   })
-  /*
+
   it('test toBbox', () => {
-    const code = wgs.toCode(82.75625, 34.0522, 6)
-    const bbox = wgs.toBbox(code)
-    console.log(bbox)
-  })*/
+    const bbox = {
+      west: -0.125,
+      south: 51.41666666666666,
+      east: 0,
+      north: 51.49999999999999
+    }
+    expect(wgs.toBbox('30770010')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: -0.11249999999999999,
+      south: 51.49479166666666,
+      east: -0.1109375,
+      north: 51.49583333333332
+    }
+    expect(wgs.toBbox('3077001098244')).toStrictEqual(bbox)
+  })
 })
