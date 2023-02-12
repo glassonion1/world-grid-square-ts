@@ -1,12 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toCode = void 0;
+exports.toJisCode = exports.toCode = exports.toFirstDigit = void 0;
 const model_1 = require("./model");
+const toFirstDigit = (lng, lat) => {
+    if (lng <= -180 || 180 < lng) {
+        throw new RangeError(`Longitude is out of bound: ${lng}`);
+    }
+    if (lat < -90 || 90 < lat) {
+        throw new RangeError(`Latitude is out of bound: ${lat}`);
+    }
+    const x = lng > 0 ? 0 : 1;
+    const y = lat > 0 ? 0 : 1;
+    const z = -100 < lng && lng <= 100 ? 0 : 1;
+    return 2 * x + 4 * y + z + 1;
+};
+exports.toFirstDigit = toFirstDigit;
 const divideGrid = (lng, lat, parent, divide) => {
     const h = parent.height / divide;
     const w = parent.width / divide;
-    const codey = Math.trunc((lat - parent.south) / h);
-    const codex = Math.abs(Math.trunc((lng - parent.west) / w));
+    const codey = Math.abs(Math.trunc((lat - parent.originLat) / h));
+    const codex = Math.abs(Math.trunc((lng - parent.originLng) / w));
     let end = `${codey}${codex}`;
     if (parent.code.length >= 10) {
         // south-west=1, south-east=2, north-west=3, north-east=4
@@ -14,19 +27,18 @@ const divideGrid = (lng, lat, parent, divide) => {
     }
     const code = `${parent.code}${end}`;
     const [signX, signY] = (0, model_1.parseFirstDigit)(code);
-    const south = parent.south + codey * h * signY;
-    const west = parent.west + codex * w * signX;
-    return { west: west, south: south, width: w, height: h, code: code };
+    const originLat = parent.originLat + codey * h * signY;
+    const originLng = parent.originLng + codex * w * signX;
+    return {
+        originLng: originLng,
+        originLat: originLat,
+        width: w,
+        height: h,
+        code: code
+    };
 };
 const toLv1 = (lng, lat) => {
-    if (lng <= -180 || 180 < lng) {
-        throw new RangeError(`Longitude is out of bound: ${lng}`);
-    }
-    if (lat < -90 || 90 < lat) {
-        throw new RangeError(`Latitude is out of bound: ${lat}`);
-    }
-    const o = (0, model_1.toFirstDigit)(lng, lat);
-    const w = model_1.Unit.lng;
+    const o = (0, exports.toFirstDigit)(lng, lat);
     const h = model_1.Unit.lat;
     const p = Math.trunc(Math.abs(lat) / h);
     const padP = String(p).padStart(3, '0');
@@ -34,9 +46,15 @@ const toLv1 = (lng, lat) => {
     const u = Math.trunc(Math.abs(lng)) % 100;
     const padU = String(u).padStart(2, '0');
     const code = `${o}${padP}${padU}`;
-    const south = Math.trunc(lat / h) * h;
-    const west = Math.trunc(lng);
-    return { west: west, south: south, width: w, height: h, code: code };
+    const originLat = Math.trunc(lat / h) * h;
+    const originLng = Math.trunc(lng);
+    return {
+        originLng: originLng,
+        originLat: originLat,
+        width: model_1.Unit.lng,
+        height: h,
+        code: code
+    };
 };
 const toLv2 = (lng, lat) => {
     const lv1 = toLv1(lng, lat);
@@ -71,3 +89,13 @@ const toCode = (lng, lat, level) => {
     return func(lng, lat).code;
 };
 exports.toCode = toCode;
+const toJisCode = (lng, lat, level) => {
+    if (lng < 100 || 180 <= lng) {
+        throw new RangeError(`Longitude is out of bound: ${lng}`);
+    }
+    if (lat < 0 || 66.66 <= lat) {
+        throw new RangeError(`Latitude is out of bound: ${lat}`);
+    }
+    return (0, exports.toCode)(lng, lat, level).slice(2);
+};
+exports.toJisCode = toJisCode;

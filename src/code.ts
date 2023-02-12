@@ -25,8 +25,8 @@ const divideGrid = (
   const h = parent.height / divide
   const w = parent.width / divide
 
-  const codey = Math.abs(Math.trunc((lat - parent.south) / h))
-  const codex = Math.abs(Math.trunc((lng - parent.west) / w))
+  const codey = Math.abs(Math.trunc((lat - parent.originLat) / h))
+  const codex = Math.abs(Math.trunc((lng - parent.originLng) / w))
 
   let end = `${codey}${codex}`
   if (parent.code.length >= 10) {
@@ -38,16 +38,21 @@ const divideGrid = (
 
   const [signX, signY] = parseFirstDigit(code)
 
-  const south = parent.south + codey * h * signY
-  const west = parent.west + codex * w * signX
+  const originLat = parent.originLat + codey * h * signY
+  const originLng = parent.originLng + codex * w * signX
 
-  return { west: west, south: south, width: w, height: h, code: code }
+  return {
+    originLng: originLng,
+    originLat: originLat,
+    width: w,
+    height: h,
+    code: code
+  }
 }
 
 const toLv1 = (lng: number, lat: number): Grid => {
   const o = toFirstDigit(lng, lat)
 
-  const w = Unit.lng
   const h = Unit.lat
 
   const p = Math.trunc(Math.abs(lat) / h)
@@ -59,10 +64,16 @@ const toLv1 = (lng: number, lat: number): Grid => {
 
   const code = `${o}${padP}${padU}`
 
-  const south = Math.trunc(lat / h) * h
-  const west = Math.trunc(lng)
+  const originLat = Math.trunc(lat / h) * h
+  const originLng = Math.trunc(lng)
 
-  return { west: west, south: south, width: w, height: h, code: code }
+  return {
+    originLng: originLng,
+    originLat: originLat,
+    width: Unit.lng,
+    height: h,
+    code: code
+  }
 }
 
 const toLv2 = (lng: number, lat: number): Grid => {
@@ -108,4 +119,16 @@ export const toCode = (lng: number, lat: number, level: number): string => {
   const func = funcs[level]
 
   return func(lng, lat).code
+}
+
+export const toJisCode = (lng: number, lat: number, level: number): string => {
+  if (lng < 100 || 180 <= lng) {
+    throw new RangeError(`Longitude is out of bound: ${lng}`)
+  }
+
+  if (lat < 0 || 66.66 <= lat) {
+    throw new RangeError(`Latitude is out of bound: ${lat}`)
+  }
+
+  return toCode(lng, lat, level).slice(2)
 }

@@ -144,6 +144,18 @@ const cases = [
       lng: 135.75859375,
       lat: 34.98802083333333
     }
+  },
+  {
+    label: 'Lv6 rio',
+    code: '7034434009423',
+    ws: {
+      lng: -43.12343749999999,
+      lat: -23.006249999999994
+    },
+    center: {
+      lng: -43.12265624999999,
+      lat: -23.00572916666666
+    }
   }
 ]
 
@@ -152,6 +164,8 @@ describe('run tests', () => {
     it(c.label, () => {
       expect(wgs.toPoint(c.code)).toStrictEqual(c.ws)
       expect(wgs.toPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
+      expect(c.ws.lng < c.center.lng).toBeTruthy()
+      expect(c.ws.lat < c.center.lat).toBeTruthy()
     })
   })
 
@@ -203,5 +217,55 @@ describe('run tests', () => {
       north: 51.49583333333332
     }
     expect(wgs.toBbox('3077001098244')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: -122.3140625,
+      south: 37.7125,
+      east: -122.3125,
+      north: 37.713541666666664
+    }
+    expect(wgs.toBbox('4056224255311')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: 18.39999999999999,
+      south: -34.02291666666667,
+      east: 18.40156249999999,
+      north: -34.021875
+    }
+    expect(wgs.toBbox('5051180322313')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: 151.290625,
+      south: -34.059374999999996,
+      east: 151.2921875,
+      north: -34.05833333333333
+    }
+    expect(wgs.toBbox('6051510273121')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: -43.12343749999999,
+      south: -23.006249999999994,
+      east: -43.12187499999999,
+      north: -23.00520833333333
+    }
+    expect(wgs.toBbox('7034434009423')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
+      west: -149.55937500000002,
+      south: -17.552083333333325,
+      east: -149.5578125,
+      north: -17.55104166666666
+    }
+    expect(wgs.toBbox('8026492464214')).toStrictEqual(bbox)
   })
 })

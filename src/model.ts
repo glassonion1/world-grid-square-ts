@@ -1,17 +1,36 @@
+/**
+ * size of one grid
+ */
 export const Unit = {
   lng: 1,
   lat: 40 / 60
 } as const
 
+/**
+ * Grid
+ *
+ * @remarks
+ * For east longitude and north latitude, the origin is west south.
+ * For west longitude and north latitude, the origin is east south.
+ * For east longitude and south latitude, the origin is west north.
+ * For west longitude and south latitude, the origin is east north.
+ */
 export interface Grid {
-  // FIXME: west south is wrong name. basis lng lat
-  west: number
-  south: number
+  /** longitude to be used as the basis for calculation */
+  originLng: number
+  /** latitude to be used as the basis for calculation */
+  originLat: number
+  /** width of a grid */
   width: number
+  /** height of a grid */
   height: number
+  /** encoded code */
   code: string
 }
 
+/**
+ * Bounding Box
+ */
 export interface Bbox {
   west: number
   south: number

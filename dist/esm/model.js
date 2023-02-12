@@ -1,3 +1,6 @@
+/**
+ * size of one grid
+ */
 export const Unit = {
     lng: 1,
     lat: 40 / 60
@@ -10,12 +13,6 @@ export const parseFirstDigit = (code) => {
     const signX = 1 - 2 * x;
     const signY = 1 - 2 * y;
     return [signX, signY, z];
-};
-export const toFirstDigit = (lng, lat) => {
-    const x = lng > 0 ? 0 : 1;
-    const y = lat > 0 ? 0 : 1;
-    const z = -100 < lng && lng <= 100 ? 0 : 1;
-    return 2 * x + 4 * y + z + 1;
 };
 export const toLength = (level) => {
     switch (level) {

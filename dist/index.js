@@ -13,8 +13,11 @@ const model_2 = require("./model");
 const pos_2 = require("./pos");
 const wgs = {
     toCode: code_2.toCode,
+    toJisCode: code_2.toJisCode,
     toPoint: pos_2.toPoint,
     toBbox: pos_2.toBbox,
+    jisCodeToPoint: pos_2.jisCodeToPoint,
+    jisCodeToBbox: pos_2.jisCodeToBbox,
     toLevel: model_2.toLevel
 };
 exports.default = wgs;

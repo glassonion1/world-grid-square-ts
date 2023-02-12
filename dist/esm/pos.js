@@ -12,11 +12,11 @@ const toGrid = (grid, level, divide) => {
     const h = grid.height / divide;
     const w = grid.width / divide;
     const [signX, signY] = parseFirstDigit(code);
-    const south = grid.south + y * h * signY;
-    const west = grid.west + x * w * signX;
+    const originLat = grid.originLat + y * h * signY;
+    const originLng = grid.originLng + x * w * signX;
     return {
-        west: west,
-        south: south,
+        originLng: originLng,
+        originLat: originLat,
         width: w,
         height: h,
         code: code
@@ -26,11 +26,11 @@ const toLv1Pos = (code) => {
     const [signX, signY, z] = parseFirstDigit(code);
     const y = Number(code.substring(1, 4));
     const x = Number(code.substring(4, 6));
-    const south = y * Unit.lat * signY;
-    const west = (x * Unit.lng + 100 * z) * signX;
+    const originLat = y * Unit.lat * signY;
+    const originLng = (x * Unit.lng + 100 * z) * signX;
     return {
-        west: west,
-        south: south,
+        originLng: originLng,
+        originLat: originLat,
         width: Unit.lng,
         height: Unit.lat,
         code: code
@@ -57,6 +57,7 @@ const toLv6Pos = (code) => {
     return toGrid(lv5, 6, 2);
 };
 export const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
+    code = code.replaceAll('-', '');
     const funcs = {
         1: toLv1Pos,
         2: toLv2Pos,
@@ -69,12 +70,21 @@ export const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const func = funcs[level];
     const g = func(code);
     const digit = 14;
-    const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
-    const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
+    const originLng = Math.trunc(g.originLng * Math.pow(10, digit)) / Math.pow(10, digit);
+    const originLat = Math.trunc(g.originLat * Math.pow(10, digit)) / Math.pow(10, digit);
     const [signX, signY] = parseFirstDigit(code);
-    const lng = w + anchorX * g.width * signX;
-    const lat = s + anchorY * g.height * signY;
+    if (signX < 0) {
+        anchorX -= 1;
+    }
+    if (signY < 0) {
+        anchorY -= 1;
+    }
+    const lng = originLng + anchorX * g.width;
+    const lat = originLat + anchorY * g.height;
     return { lng: lng, lat: lat };
+};
+export const jisCodeToPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
+    return toPoint(`20${code}`, anchorX, anchorY);
 };
 export const toBbox = (code) => {
     const ws = toPoint(code, 0, 0);
@@ -85,4 +95,7 @@ export const toBbox = (code) => {
         east: en.lng,
         north: en.lat
     };
+};
+export const jisCodeToBbox = (code) => {
+    return toBbox(`20${code}`);
 };

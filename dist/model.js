@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toLevel = exports.toLength = exports.toFirstDigit = exports.parseFirstDigit = exports.Unit = void 0;
+exports.toLevel = exports.toLength = exports.parseFirstDigit = exports.Unit = void 0;
+/**
+ * size of one grid
+ */
 exports.Unit = {
     lng: 1,
     lat: 40 / 60
@@ -15,13 +18,6 @@ const parseFirstDigit = (code) => {
     return [signX, signY, z];
 };
 exports.parseFirstDigit = parseFirstDigit;
-const toFirstDigit = (lng, lat) => {
-    const x = lng > 0 ? 0 : 1;
-    const y = lat > 0 ? 0 : 1;
-    const z = -100 < lng && lng <= 100 ? 0 : 1;
-    return 2 * x + 4 * y + z + 1;
-};
-exports.toFirstDigit = toFirstDigit;
 const toLength = (level) => {
     switch (level) {
         case 1:

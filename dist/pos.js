@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toBbox = exports.toPoint = void 0;
+exports.jisCodeToBbox = exports.toBbox = exports.jisCodeToPoint = exports.toPoint = void 0;
 const model_1 = require("./model");
 const toGrid = (grid, level, divide) => {
     const len = (0, model_1.toLength)(level);
@@ -15,11 +15,11 @@ const toGrid = (grid, level, divide) => {
     const h = grid.height / divide;
     const w = grid.width / divide;
     const [signX, signY] = (0, model_1.parseFirstDigit)(code);
-    const south = grid.south + y * h * signY;
-    const west = grid.west + x * w * signX;
+    const originLat = grid.originLat + y * h * signY;
+    const originLng = grid.originLng + x * w * signX;
     return {
-        west: west,
-        south: south,
+        originLng: originLng,
+        originLat: originLat,
         width: w,
         height: h,
         code: code
@@ -29,11 +29,11 @@ const toLv1Pos = (code) => {
     const [signX, signY, z] = (0, model_1.parseFirstDigit)(code);
     const y = Number(code.substring(1, 4));
     const x = Number(code.substring(4, 6));
-    const south = y * model_1.Unit.lat * signY;
-    const west = (x * model_1.Unit.lng + 100 * z) * signX;
+    const originLat = y * model_1.Unit.lat * signY;
+    const originLng = (x * model_1.Unit.lng + 100 * z) * signX;
     return {
-        west: west,
-        south: south,
+        originLng: originLng,
+        originLat: originLat,
         width: model_1.Unit.lng,
         height: model_1.Unit.lat,
         code: code
@@ -60,6 +60,7 @@ const toLv6Pos = (code) => {
     return toGrid(lv5, 6, 2);
 };
 const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
+    code = code.replaceAll('-', '');
     const funcs = {
         1: toLv1Pos,
         2: toLv2Pos,
@@ -72,14 +73,24 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     const func = funcs[level];
     const g = func(code);
     const digit = 14;
-    const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit);
-    const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit);
+    const originLng = Math.trunc(g.originLng * Math.pow(10, digit)) / Math.pow(10, digit);
+    const originLat = Math.trunc(g.originLat * Math.pow(10, digit)) / Math.pow(10, digit);
     const [signX, signY] = (0, model_1.parseFirstDigit)(code);
-    const lng = w + anchorX * g.width * signX;
-    const lat = s + anchorY * g.height * signY;
+    if (signX < 0) {
+        anchorX -= 1;
+    }
+    if (signY < 0) {
+        anchorY -= 1;
+    }
+    const lng = originLng + anchorX * g.width;
+    const lat = originLat + anchorY * g.height;
     return { lng: lng, lat: lat };
 };
 exports.toPoint = toPoint;
+const jisCodeToPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
+    return (0, exports.toPoint)(`20${code}`, anchorX, anchorY);
+};
+exports.jisCodeToPoint = jisCodeToPoint;
 const toBbox = (code) => {
     const ws = (0, exports.toPoint)(code, 0, 0);
     const en = (0, exports.toPoint)(code, 1, 1);
@@ -91,3 +102,7 @@ const toBbox = (code) => {
     };
 };
 exports.toBbox = toBbox;
+const jisCodeToBbox = (code) => {
+    return (0, exports.toBbox)(`20${code}`);
+};
+exports.jisCodeToBbox = jisCodeToBbox;

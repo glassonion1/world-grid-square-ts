@@ -25,12 +25,12 @@ const toGrid = (grid: Grid, level: number, divide: number): Grid => {
 
   const [signX, signY] = parseFirstDigit(code)
 
-  const south = grid.south + y * h * signY
-  const west = grid.west + x * w * signX
+  const originLat = grid.originLat + y * h * signY
+  const originLng = grid.originLng + x * w * signX
 
   return {
-    west: west,
-    south: south,
+    originLng: originLng,
+    originLat: originLat,
     width: w,
     height: h,
     code: code
@@ -43,12 +43,12 @@ const toLv1Pos = (code: string): Grid => {
   const y = Number(code.substring(1, 4))
   const x = Number(code.substring(4, 6))
 
-  const south = y * Unit.lat * signY
-  const west = (x * Unit.lng + 100 * z) * signX
+  const originLat = y * Unit.lat * signY
+  const originLng = (x * Unit.lng + 100 * z) * signX
 
   return {
-    west: west,
-    south: south,
+    originLng: originLng,
+    originLat: originLat,
     width: Unit.lng,
     height: Unit.lat,
     code: code
@@ -85,6 +85,7 @@ export const toPoint = (
   anchorX: number = 0.0,
   anchorY: number = 0.0
 ): Point => {
+  code = code.replaceAll('-', '')
   const funcs: { [key: number]: (code: string) => Grid } = {
     1: toLv1Pos,
     2: toLv2Pos,
@@ -101,8 +102,10 @@ export const toPoint = (
   const g = func(code)
 
   const digit = 14
-  const w = Math.trunc(g.west * Math.pow(10, digit)) / Math.pow(10, digit)
-  const s = Math.trunc(g.south * Math.pow(10, digit)) / Math.pow(10, digit)
+  const originLng =
+    Math.trunc(g.originLng * Math.pow(10, digit)) / Math.pow(10, digit)
+  const originLat =
+    Math.trunc(g.originLat * Math.pow(10, digit)) / Math.pow(10, digit)
 
   const [signX, signY] = parseFirstDigit(code)
 
@@ -114,10 +117,18 @@ export const toPoint = (
     anchorY -= 1
   }
 
-  const lng = w + anchorX * g.width
-  const lat = s + anchorY * g.height
+  const lng = originLng + anchorX * g.width
+  const lat = originLat + anchorY * g.height
 
   return { lng: lng, lat: lat }
+}
+
+export const jisCodeToPoint = (
+  code: string,
+  anchorX: number = 0.0,
+  anchorY: number = 0.0
+): Point => {
+  return toPoint(`20${code}`, anchorX, anchorY)
 }
 
 export const toBbox = (code: string): Bbox => {
@@ -130,4 +141,8 @@ export const toBbox = (code: string): Bbox => {
     east: en.lng,
     north: en.lat
   }
+}
+
+export const jisCodeToBbox = (code: string): Bbox => {
+  return toBbox(`20${code}`)
 }
