@@ -80,6 +80,14 @@ const toLv6Pos = (code: string): Grid => {
   return toGrid(lv5, 6, 2)
 }
 
+/**
+ * Returns longitude and latitude from the grid square code.
+ *
+ * @param code - the grid square code
+ * @param anchorX - anchor point of longitude
+   @param anchorY - anchor point of latitude
+ * @returns Point object
+ */
 export const toPoint = (
   code: string,
   anchorX: number = 0.0,
@@ -123,6 +131,14 @@ export const toPoint = (
   return { lng: lng, lat: lat }
 }
 
+/**
+ * Returns longitude and latitude from the jis grid square code.
+ *
+ * @param code - the jis grid square code
+ * @param anchorX - anchor point of longitude
+   @param anchorY - anchor point of latitude
+ * @returns Point object
+ */
 export const jisCodeToPoint = (
   code: string,
   anchorX: number = 0.0,
@@ -131,6 +147,12 @@ export const jisCodeToPoint = (
   return toPoint(`20${code}`, anchorX, anchorY)
 }
 
+/**
+ * Returns bounding box from the grid square code.
+ *
+ * @param code - the grid square code
+ * @returns Bbox object
+ */
 export const toBbox = (code: string): Bbox => {
   const ws = toPoint(code, 0, 0)
   const en = toPoint(code, 1, 1)
@@ -143,6 +165,12 @@ export const toBbox = (code: string): Bbox => {
   }
 }
 
+/**
+ * Returns bounding box from the jis grid square code.
+ *
+ * @param code - the jis grid square code
+ * @returns Bbox object
+ */
 export const jisCodeToBbox = (code: string): Bbox => {
   return toBbox(`20${code}`)
 }
