@@ -106,6 +106,13 @@ const toLv6 = (lng: number, lat: number): Grid => {
   return divideGrid(lng, lat, lv5, 2)
 }
 
+/**
+ * Returns the grid square code from longitude and latitude.
+ *
+ * @param lng - longitude
+ * @param lat - latitude
+ * @returns the grid square code
+ */
 export const toCode = (lng: number, lat: number, level: number): string => {
   const funcs: { [key: number]: (lng: number, lat: number) => Grid } = {
     1: toLv1,
@@ -121,6 +128,13 @@ export const toCode = (lng: number, lat: number, level: number): string => {
   return func(lng, lat).code
 }
 
+/**
+ * Returns the jis grid square code from longitude and latitude.
+ *
+ * @param lng - longitude
+ * @param lat - latitude
+ * @returns the jis grid square code
+ */
 export const toJisCode = (lng: number, lat: number, level: number): string => {
   if (lng < 100 || 180 <= lng) {
     throw new RangeError(`Longitude is out of bound: ${lng}`)
