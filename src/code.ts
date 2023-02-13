@@ -1,4 +1,4 @@
-import { Grid, Unit, parseFirstDigit } from './model'
+import { Grid, Unit, parseFirstDigit, Level } from './model'
 
 export const toFirstDigit = (lng: number, lat: number): number => {
   if (lng <= -180 || 180 < lng) {
@@ -29,7 +29,7 @@ const divideGrid = (
   const codex = Math.abs(Math.trunc((lng - parent.originLng) / w))
 
   let end = `${codey}${codex}`
-  if (parent.code.length >= 10) {
+  if (divide == 2) {
     // south-west=1, south-east=2, north-west=3, north-east=4
     end = `${2 * codey + codex + 1}`
   }
@@ -106,21 +106,50 @@ const toLv6 = (lng: number, lat: number): Grid => {
   return divideGrid(lng, lat, lv5, 2)
 }
 
+// Ext100 is not provided because the code cannot be distinguished from lv6.
+const toExt100 = (lng: number, lat: number): Grid => {
+  const lv4 = toLv4(lng, lat)
+
+  return divideGrid(lng, lat, lv4, 5)
+}
+
+const toExt50 = (lng: number, lat: number): Grid => {
+  const ext100 = toExt100(lng, lat)
+
+  return divideGrid(lng, lat, ext100, 2)
+}
+
+const toExt10 = (lng: number, lat: number): Grid => {
+  const ext50 = toExt50(lng, lat)
+
+  return divideGrid(lng, lat, ext50, 5)
+}
+
+const toExt5 = (lng: number, lat: number): Grid => {
+  const ext10 = toExt10(lng, lat)
+
+  return divideGrid(lng, lat, ext10, 2)
+}
+
 /**
  * Returns the grid square code from longitude and latitude.
  *
  * @param lng - longitude
  * @param lat - latitude
+ * @param level - zoom level 1 to 9
  * @returns the grid square code
  */
-export const toCode = (lng: number, lat: number, level: number): string => {
+export const toCode = (lng: number, lat: number, level: Level): string => {
   const funcs: { [key: number]: (lng: number, lat: number) => Grid } = {
     1: toLv1,
     2: toLv2,
     3: toLv3,
     4: toLv4,
     5: toLv5,
-    6: toLv6
+    6: toLv6,
+    7: toExt50,
+    8: toExt10,
+    9: toExt5
   }
 
   const func = funcs[level]
@@ -135,7 +164,7 @@ export const toCode = (lng: number, lat: number, level: number): string => {
  * @param lat - latitude
  * @returns the jis grid square code
  */
-export const toJisCode = (lng: number, lat: number, level: number): string => {
+export const toJisCode = (lng: number, lat: number, level: Level): string => {
   if (lng < 100 || 180 <= lng) {
     throw new RangeError(`Longitude is out of bound: ${lng}`)
   }

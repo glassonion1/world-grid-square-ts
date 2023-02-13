@@ -1,3 +1,5 @@
+export type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
 /**
  * size of one grid
  */
@@ -38,6 +40,9 @@ export interface Bbox {
   north: number
 }
 
+/**
+ * Point
+ */
 export interface Point {
   lng: number
   lat: number
@@ -55,10 +60,8 @@ export const parseFirstDigit = (code: string): number[] => {
   return [signX, signY, z]
 }
 
-export const toLength = (level: number): number => {
+export const toLength = (level: Level): number => {
   switch (level) {
-    case 1:
-      return 6
     case 2:
       return 8
     case 3:
@@ -69,11 +72,17 @@ export const toLength = (level: number): number => {
       return 12
     case 6:
       return 13
+    case 7:
+      return 14
+    case 8:
+      return 16
+    case 9:
+      return 17
   }
-  throw new Error(`Unsupported level: ${level}`)
+  return 6
 }
 
-export const toLevel = (code: string): number => {
+export const toLevel = (code: string): Level => {
   switch (code.length) {
     case 6:
       return 1
@@ -87,6 +96,12 @@ export const toLevel = (code: string): number => {
       return 5
     case 13:
       return 6
+    case 14:
+      return 7
+    case 16:
+      return 8
+    case 17:
+      return 9
   }
   throw new Error(`Unsupported code: ${code}`)
 }

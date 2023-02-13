@@ -21,7 +21,7 @@ const divideGrid = (lng, lat, parent, divide) => {
     const codey = Math.abs(Math.trunc((lat - parent.originLat) / h));
     const codex = Math.abs(Math.trunc((lng - parent.originLng) / w));
     let end = `${codey}${codex}`;
-    if (parent.code.length >= 10) {
+    if (divide == 2) {
         // south-west=1, south-east=2, north-west=3, north-east=4
         end = `${2 * codey + codex + 1}`;
     }
@@ -76,6 +76,31 @@ const toLv6 = (lng, lat) => {
     const lv5 = toLv5(lng, lat);
     return divideGrid(lng, lat, lv5, 2);
 };
+// Ext100 is not provided because the code cannot be distinguished from lv6.
+const toExt100 = (lng, lat) => {
+    const lv4 = toLv4(lng, lat);
+    return divideGrid(lng, lat, lv4, 5);
+};
+const toExt50 = (lng, lat) => {
+    const ext100 = toExt100(lng, lat);
+    return divideGrid(lng, lat, ext100, 2);
+};
+const toExt10 = (lng, lat) => {
+    const ext50 = toExt50(lng, lat);
+    return divideGrid(lng, lat, ext50, 5);
+};
+const toExt5 = (lng, lat) => {
+    const ext10 = toExt10(lng, lat);
+    return divideGrid(lng, lat, ext10, 2);
+};
+/**
+ * Returns the grid square code from longitude and latitude.
+ *
+ * @param lng - longitude
+ * @param lat - latitude
+ * @param level - zoom level 1 to 10
+ * @returns the grid square code
+ */
 const toCode = (lng, lat, level) => {
     const funcs = {
         1: toLv1,
@@ -83,12 +108,22 @@ const toCode = (lng, lat, level) => {
         3: toLv3,
         4: toLv4,
         5: toLv5,
-        6: toLv6
+        6: toLv6,
+        7: toExt50,
+        8: toExt10,
+        9: toExt5
     };
     const func = funcs[level];
     return func(lng, lat).code;
 };
 exports.toCode = toCode;
+/**
+ * Returns the jis grid square code from longitude and latitude.
+ *
+ * @param lng - longitude
+ * @param lat - latitude
+ * @returns the jis grid square code
+ */
 const toJisCode = (lng, lat, level) => {
     if (lng < 100 || 180 <= lng) {
         throw new RangeError(`Longitude is out of bound: ${lng}`);

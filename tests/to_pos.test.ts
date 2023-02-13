@@ -191,6 +191,16 @@ describe('run tests', () => {
 
   it('test toBbox', () => {
     const bbox = {
+      west: 139.69818750000002,
+      south: 35.664,
+      east: 139.69825000000003,
+      north: 35.66404166666667
+    }
+    expect(wgs.toBbox('20533935954134302')).toStrictEqual(bbox)
+  })
+
+  it('test toBbox', () => {
+    const bbox = {
       west: -1,
       south: 51.33333333333333,
       east: 0,

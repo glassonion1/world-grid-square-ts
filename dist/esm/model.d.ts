@@ -1,3 +1,4 @@
+export type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 /**
  * size of one grid
  */
@@ -35,11 +36,14 @@ export interface Bbox {
     east: number;
     north: number;
 }
+/**
+ * Point
+ */
 export interface Point {
     lng: number;
     lat: number;
 }
 export declare const parseFirstDigit: (code: string) => number[];
-export declare const toLength: (level: number) => number;
-export declare const toLevel: (code: string) => number;
+export declare const toLength: (level: Level) => number;
+export declare const toLevel: (code: string) => Level;
 //# sourceMappingURL=model.d.ts.map

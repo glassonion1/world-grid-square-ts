@@ -59,6 +59,31 @@ const toLv6Pos = (code) => {
     const lv5 = toLv5Pos(code);
     return toGrid(lv5, 6, 2);
 };
+// Ext100 is not provided because the code cannot be distinguished from lv6.
+const toExt100Pos = (code) => {
+    const lv4 = toLv4Pos(code);
+    return toGrid(lv4, 6, 5);
+};
+const toExt50Pos = (code) => {
+    const ext100 = toExt100Pos(code);
+    return toGrid(ext100, 7, 2);
+};
+const toExt10Pos = (code) => {
+    const ext50 = toExt50Pos(code);
+    return toGrid(ext50, 8, 5);
+};
+const toExt5Pos = (code) => {
+    const ext10 = toExt10Pos(code);
+    return toGrid(ext10, 9, 2);
+};
+/**
+ * Returns longitude and latitude from the grid square code.
+ *
+ * @param code - the grid square code
+ * @param anchorX - anchor point of longitude
+   @param anchorY - anchor point of latitude
+ * @returns Point object
+ */
 const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     code = code.replaceAll('-', '');
     const funcs = {
@@ -67,7 +92,10 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
         3: toLv3Pos,
         4: toLv4Pos,
         5: toLv5Pos,
-        6: toLv6Pos
+        6: toLv6Pos,
+        7: toExt50Pos,
+        8: toExt10Pos,
+        9: toExt5Pos
     };
     const level = (0, model_1.toLevel)(code);
     const func = funcs[level];
@@ -87,10 +115,24 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     return { lng: lng, lat: lat };
 };
 exports.toPoint = toPoint;
+/**
+ * Returns longitude and latitude from the jis grid square code.
+ *
+ * @param code - the jis grid square code
+ * @param anchorX - anchor point of longitude
+   @param anchorY - anchor point of latitude
+ * @returns Point object
+ */
 const jisCodeToPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
     return (0, exports.toPoint)(`20${code}`, anchorX, anchorY);
 };
 exports.jisCodeToPoint = jisCodeToPoint;
+/**
+ * Returns bounding box from the grid square code.
+ *
+ * @param code - the grid square code
+ * @returns Bbox object
+ */
 const toBbox = (code) => {
     const ws = (0, exports.toPoint)(code, 0, 0);
     const en = (0, exports.toPoint)(code, 1, 1);
@@ -102,6 +144,12 @@ const toBbox = (code) => {
     };
 };
 exports.toBbox = toBbox;
+/**
+ * Returns bounding box from the jis grid square code.
+ *
+ * @param code - the jis grid square code
+ * @returns Bbox object
+ */
 const jisCodeToBbox = (code) => {
     return (0, exports.toBbox)(`20${code}`);
 };
