@@ -1,5 +1,3 @@
-export type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
 /**
  * size of one grid
  */
@@ -60,8 +58,10 @@ export const parseFirstDigit = (code: string): number[] => {
   return [signX, signY, z]
 }
 
-export const toLength = (level: Level): number => {
+export const toLength = (level: number): number => {
   switch (level) {
+    case 1:
+      return 6
     case 2:
       return 8
     case 3:
@@ -79,10 +79,10 @@ export const toLength = (level: Level): number => {
     case 9:
       return 17
   }
-  return 6
+  throw new Error(`Unsupported level: ${level}`)
 }
 
-export const toLevel = (code: string): Level => {
+export const toLevel = (code: string): number => {
   switch (code.length) {
     case 6:
       return 1

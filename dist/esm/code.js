@@ -94,10 +94,13 @@ const toExt5 = (lng, lat) => {
  *
  * @param lng - longitude
  * @param lat - latitude
- * @param level - zoom level 1 to 10
+ * @param level - zoom level 1 to 9
  * @returns the grid square code
  */
 export const toCode = (lng, lat, level) => {
+    if (level < 1 && level > 9) {
+        throw new Error(`Unsupported level: ${level}`);
+    }
     const funcs = {
         1: toLv1,
         2: toLv2,

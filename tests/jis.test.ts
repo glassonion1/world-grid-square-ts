@@ -115,6 +115,12 @@ describe('run tests', () => {
     expect(() => {
       wgs.toJisCode(kyotoTower[0], 180, 1)
     }).toThrowError(RangeError)
+    expect(() => {
+      wgs.toJisCode(kyotoTower[0], kyotoTower[1], 0)
+    }).toThrowError(Error)
+    expect(() => {
+      wgs.toJisCode(kyotoTower[0], kyotoTower[1], 10)
+    }).toThrowError(Error)
   })
 
   cases.forEach((c) => {

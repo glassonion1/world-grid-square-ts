@@ -16,6 +16,8 @@ export const parseFirstDigit = (code) => {
 };
 export const toLength = (level) => {
     switch (level) {
+        case 1:
+            return 6;
         case 2:
             return 8;
         case 3:
@@ -33,7 +35,7 @@ export const toLength = (level) => {
         case 9:
             return 17;
     }
-    return 6;
+    throw new Error(`Unsupported level: ${level}`);
 };
 export const toLevel = (code) => {
     switch (code.length) {

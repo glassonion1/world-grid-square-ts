@@ -5,11 +5,10 @@ import {
   Unit,
   toLength,
   toLevel,
-  parseFirstDigit,
-  Level
+  parseFirstDigit
 } from './model'
 
-const toGrid = (grid: Grid, level: Level, divide: number): Grid => {
+const toGrid = (grid: Grid, level: number, divide: number): Grid => {
   const len = toLength(level)
   const code = grid.code
 

@@ -1,4 +1,4 @@
-import { Grid, Unit, parseFirstDigit, Level } from './model'
+import { Grid, Unit, parseFirstDigit } from './model'
 
 export const toFirstDigit = (lng: number, lat: number): number => {
   if (lng <= -180 || 180 < lng) {
@@ -139,7 +139,11 @@ const toExt5 = (lng: number, lat: number): Grid => {
  * @param level - zoom level 1 to 9
  * @returns the grid square code
  */
-export const toCode = (lng: number, lat: number, level: Level): string => {
+export const toCode = (lng: number, lat: number, level: number): string => {
+  if (level < 1 || level > 9) {
+    throw new Error(`Unsupported level: ${level}`)
+  }
+
   const funcs: { [key: number]: (lng: number, lat: number) => Grid } = {
     1: toLv1,
     2: toLv2,
@@ -164,7 +168,7 @@ export const toCode = (lng: number, lat: number, level: Level): string => {
  * @param lat - latitude
  * @returns the jis grid square code
  */
-export const toJisCode = (lng: number, lat: number, level: Level): string => {
+export const toJisCode = (lng: number, lat: number, level: number): string => {
   if (lng < 100 || 180 <= lng) {
     throw new RangeError(`Longitude is out of bound: ${lng}`)
   }
