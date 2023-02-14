@@ -76,22 +76,17 @@ const toLv6 = (lng, lat) => {
     const lv5 = toLv5(lng, lat);
     return divideGrid(lng, lat, lv5, 2);
 };
-// Ext100 is not provided because the code cannot be distinguished from lv6.
-const toExt100 = (lng, lat) => {
-    const lv4 = toLv4(lng, lat);
-    return divideGrid(lng, lat, lv4, 5);
+const toExt25 = (lng, lat) => {
+    const lv6 = toLv6(lng, lat);
+    return divideGrid(lng, lat, lv6, 5);
 };
-const toExt50 = (lng, lat) => {
-    const ext100 = toExt100(lng, lat);
-    return divideGrid(lng, lat, ext100, 2);
-};
-const toExt10 = (lng, lat) => {
-    const ext50 = toExt50(lng, lat);
-    return divideGrid(lng, lat, ext50, 5);
+const toExt12 = (lng, lat) => {
+    const ext25 = toExt25(lng, lat);
+    return divideGrid(lng, lat, ext25, 2);
 };
 const toExt5 = (lng, lat) => {
-    const ext10 = toExt10(lng, lat);
-    return divideGrid(lng, lat, ext10, 2);
+    const ext25 = toExt25(lng, lat);
+    return divideGrid(lng, lat, ext25, 5);
 };
 /**
  * Returns the grid square code from longitude and latitude.
@@ -102,7 +97,7 @@ const toExt5 = (lng, lat) => {
  * @returns the grid square code
  */
 const toCode = (lng, lat, level) => {
-    if (level < 1 && level > 9) {
+    if (level < 1 || level > 9) {
         throw new Error(`Unsupported level: ${level}`);
     }
     const funcs = {
@@ -112,8 +107,8 @@ const toCode = (lng, lat, level) => {
         4: toLv4,
         5: toLv5,
         6: toLv6,
-        7: toExt50,
-        8: toExt10,
+        7: toExt25,
+        8: toExt12,
         9: toExt5
     };
     const func = funcs[level];

@@ -21,9 +21,9 @@ describe('run tests', () => {
     expect(wgs.toCode(shibuya[0], shibuya[1], 4)).toBe('20533935954')
     expect(wgs.toCode(shibuya[0], shibuya[1], 5)).toBe('205339359542')
     expect(wgs.toCode(shibuya[0], shibuya[1], 6)).toBe('2053393595423')
-    expect(wgs.toCode(shibuya[0], shibuya[1], 7)).toBe('20533935954134')
-    expect(wgs.toCode(shibuya[0], shibuya[1], 8)).toBe('2053393595413430')
-    expect(wgs.toCode(shibuya[0], shibuya[1], 9)).toBe('20533935954134302')
+    expect(wgs.toCode(shibuya[0], shibuya[1], 7)).toBe('205339359542324')
+    expect(wgs.toCode(shibuya[0], shibuya[1], 8)).toBe('2053393595423241')
+    expect(wgs.toCode(shibuya[0], shibuya[1], 9)).toBe('20533935954232411')
 
     expect(wgs.toCode(kyotoTower[0], kyotoTower[1], 1)).toBe('205235')
     expect(wgs.toCode(kyotoTower[0], kyotoTower[1], 2)).toBe('20523536')

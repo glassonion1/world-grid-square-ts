@@ -37,7 +37,7 @@ const toGrid = (grid: Grid, level: number, divide: number): Grid => {
   }
 }
 
-const toLv1Pos = (code: string): Grid => {
+const toLv1 = (code: string): Grid => {
   const [signX, signY, z] = parseFirstDigit(code)
 
   const y = Number(code.substring(1, 4))
@@ -55,50 +55,44 @@ const toLv1Pos = (code: string): Grid => {
   }
 }
 
-const toLv2Pos = (code: string): Grid => {
-  const lv1 = toLv1Pos(code)
+const toLv2 = (code: string): Grid => {
+  const lv1 = toLv1(code)
   return toGrid(lv1, 2, 8)
 }
 
-const toLv3Pos = (code: string): Grid => {
-  const lv2 = toLv2Pos(code)
+const toLv3 = (code: string): Grid => {
+  const lv2 = toLv2(code)
   return toGrid(lv2, 3, 10)
 }
 
-const toLv4Pos = (code: string): Grid => {
-  const lv3 = toLv3Pos(code)
+const toLv4 = (code: string): Grid => {
+  const lv3 = toLv3(code)
   return toGrid(lv3, 4, 2)
 }
 
-const toLv5Pos = (code: string): Grid => {
-  const lv4 = toLv4Pos(code)
+const toLv5 = (code: string): Grid => {
+  const lv4 = toLv4(code)
   return toGrid(lv4, 5, 2)
 }
 
-const toLv6Pos = (code: string): Grid => {
-  const lv5 = toLv5Pos(code)
+const toLv6 = (code: string): Grid => {
+  const lv5 = toLv5(code)
   return toGrid(lv5, 6, 2)
 }
 
-// Ext100 is not provided because the code cannot be distinguished from lv6.
-const toExt100Pos = (code: string): Grid => {
-  const lv4 = toLv4Pos(code)
-  return toGrid(lv4, 6, 5)
+const toExt25 = (code: string): Grid => {
+  const lv6 = toLv6(code)
+  return toGrid(lv6, 7, 5)
 }
 
-const toExt50Pos = (code: string): Grid => {
-  const ext100 = toExt100Pos(code)
-  return toGrid(ext100, 7, 2)
+const toExt12 = (code: string): Grid => {
+  const ext25 = toExt25(code)
+  return toGrid(ext25, 8, 2)
 }
 
-const toExt10Pos = (code: string): Grid => {
-  const ext50 = toExt50Pos(code)
-  return toGrid(ext50, 8, 5)
-}
-
-const toExt5Pos = (code: string): Grid => {
-  const ext10 = toExt10Pos(code)
-  return toGrid(ext10, 9, 2)
+const toExt5 = (code: string): Grid => {
+  const ext12 = toExt12(code)
+  return toGrid(ext12, 9, 5)
 }
 
 /**
@@ -116,15 +110,15 @@ export const toPoint = (
 ): Point => {
   code = code.replaceAll('-', '')
   const funcs: { [key: number]: (code: string) => Grid } = {
-    1: toLv1Pos,
-    2: toLv2Pos,
-    3: toLv3Pos,
-    4: toLv4Pos,
-    5: toLv5Pos,
-    6: toLv6Pos,
-    7: toExt50Pos,
-    8: toExt10Pos,
-    9: toExt5Pos
+    1: toLv1,
+    2: toLv2,
+    3: toLv3,
+    4: toLv4,
+    5: toLv5,
+    6: toLv6,
+    7: toExt25,
+    8: toExt12,
+    9: toExt5
   }
 
   const level = toLevel(code)

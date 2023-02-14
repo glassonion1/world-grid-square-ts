@@ -1,6 +1,6 @@
 export { toCode } from './code';
 export { toLevel } from './model';
-export { toPoint, toBbox } from './pos';
+export { toPoint, toBbox } from './point';
 declare const wgs: {
     readonly toCode: (lng: number, lat: number, level: number) => string;
     readonly toJisCode: (lng: number, lat: number, level: number) => string;

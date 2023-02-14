@@ -31,4 +31,4 @@ export declare const toBbox: (code: string) => Bbox;
  * @returns Bbox object
  */
 export declare const jisCodeToBbox: (code: string) => Bbox;
-//# sourceMappingURL=pos.d.ts.map
+//# sourceMappingURL=point.d.ts.map

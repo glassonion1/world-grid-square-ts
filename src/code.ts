@@ -106,29 +106,22 @@ const toLv6 = (lng: number, lat: number): Grid => {
   return divideGrid(lng, lat, lv5, 2)
 }
 
-// Ext100 is not provided because the code cannot be distinguished from lv6.
-const toExt100 = (lng: number, lat: number): Grid => {
-  const lv4 = toLv4(lng, lat)
+const toExt25 = (lng: number, lat: number): Grid => {
+  const lv6 = toLv6(lng, lat)
 
-  return divideGrid(lng, lat, lv4, 5)
+  return divideGrid(lng, lat, lv6, 5)
 }
 
-const toExt50 = (lng: number, lat: number): Grid => {
-  const ext100 = toExt100(lng, lat)
+const toExt12 = (lng: number, lat: number): Grid => {
+  const ext25 = toExt25(lng, lat)
 
-  return divideGrid(lng, lat, ext100, 2)
-}
-
-const toExt10 = (lng: number, lat: number): Grid => {
-  const ext50 = toExt50(lng, lat)
-
-  return divideGrid(lng, lat, ext50, 5)
+  return divideGrid(lng, lat, ext25, 2)
 }
 
 const toExt5 = (lng: number, lat: number): Grid => {
-  const ext10 = toExt10(lng, lat)
+  const ext25 = toExt25(lng, lat)
 
-  return divideGrid(lng, lat, ext10, 2)
+  return divideGrid(lng, lat, ext25, 5)
 }
 
 /**
@@ -151,8 +144,8 @@ export const toCode = (lng: number, lat: number, level: number): string => {
     4: toLv4,
     5: toLv5,
     6: toLv6,
-    7: toExt50,
-    8: toExt10,
+    7: toExt25,
+    8: toExt12,
     9: toExt5
   }
 

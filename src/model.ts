@@ -73,7 +73,7 @@ export const toLength = (level: number): number => {
     case 6:
       return 13
     case 7:
-      return 14
+      return 15
     case 8:
       return 16
     case 9:
@@ -96,7 +96,7 @@ export const toLevel = (code: string): number => {
       return 5
     case 13:
       return 6
-    case 14:
+    case 15:
       return 7
     case 16:
       return 8
