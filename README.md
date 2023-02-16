@@ -13,6 +13,9 @@ World grid square outlined here: https://www.fttsus.org/worldgrids/en/top-en/
 - 4th level 500m grid
 - 5th level 250m grid
 - 6th level 125m grid
+- 7th level 25m grid(extension spec)
+- 8th level 12.5m grid(extension spec)
+- 9th level 5m grid(extension spec)
 
 ## Install
 ```
