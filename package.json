@@ -25,6 +25,11 @@
     "geocode"
   ],
   "author": "glassonion1",
+  "homepage": "https://github.com/glassonion1/world-grid-square-ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:glassonion1/world-grid-square-ts.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@jest/types": "^29.3.1",
