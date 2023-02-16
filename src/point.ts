@@ -100,7 +100,7 @@ const toExt5 = (code: string): Grid => {
  *
  * @param code - the grid square code
  * @param anchorX - anchor point of longitude
-   @param anchorY - anchor point of latitude
+ * @param anchorY - anchor point of latitude
  * @returns Point object
  */
 export const toPoint = (
