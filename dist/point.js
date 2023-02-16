@@ -68,15 +68,15 @@ const toExt12 = (code) => {
     return toGrid(ext25, 8, 2);
 };
 const toExt5 = (code) => {
-    const ext12 = toExt12(code);
-    return toGrid(ext12, 9, 5);
+    const ext25 = toExt25(code);
+    return toGrid(ext25, 9, 5);
 };
 /**
  * Returns longitude and latitude from the grid square code.
  *
  * @param code - the grid square code
  * @param anchorX - anchor point of longitude
-   @param anchorY - anchor point of latitude
+ * @param anchorY - anchor point of latitude
  * @returns Point object
  */
 const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {

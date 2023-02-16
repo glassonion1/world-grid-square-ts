@@ -91,8 +91,8 @@ const toExt12 = (code: string): Grid => {
 }
 
 const toExt5 = (code: string): Grid => {
-  const ext12 = toExt12(code)
-  return toGrid(ext12, 9, 5)
+  const ext25 = toExt25(code)
+  return toGrid(ext25, 9, 5)
 }
 
 /**

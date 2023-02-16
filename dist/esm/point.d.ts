@@ -4,7 +4,7 @@ import { Point, Bbox } from './model';
  *
  * @param code - the grid square code
  * @param anchorX - anchor point of longitude
-   @param anchorY - anchor point of latitude
+ * @param anchorY - anchor point of latitude
  * @returns Point object
  */
 export declare const toPoint: (code: string, anchorX?: number, anchorY?: number) => Point;
