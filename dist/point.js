@@ -1,22 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jisCodeToBbox = exports.toBbox = exports.jisCodeToPoint = exports.toPoint = void 0;
+exports.pointToCode = exports.toFirstDigit = void 0;
+const code_1 = require("./code");
 const model_1 = require("./model");
-const toGrid = (grid, level, divide) => {
-    const len = (0, model_1.toLength)(level);
-    const code = grid.code;
-    let y = Number(code[len - 2]);
-    let x = Number(code[len - 1]);
-    if (divide == 2) {
-        const c = Number(code[len - 1]) - 1;
-        y = Math.trunc(c / 2);
-        x = c % 2;
+const toFirstDigit = (lng, lat) => {
+    if (lng <= -180 || 180 < lng) {
+        throw new RangeError(`Longitude is out of bound: ${lng}`);
     }
-    const h = grid.height / divide;
-    const w = grid.width / divide;
-    const [signX, signY] = (0, model_1.parseFirstDigit)(code);
-    const originLat = grid.originLat + y * h * signY;
-    const originLng = grid.originLng + x * w * signX;
+    if (lat < -90 || 90 < lat) {
+        throw new RangeError(`Latitude is out of bound: ${lat}`);
+    }
+    const x = lng > 0 ? 0 : 1;
+    const y = lat > 0 ? 0 : 1;
+    const z = -100 < lng && lng <= 100 ? 0 : 1;
+    return 2 * x + 4 * y + z + 1;
+};
+exports.toFirstDigit = toFirstDigit;
+const divideGrid = (lng, lat, parent, divide) => {
+    const h = parent.height / divide;
+    const w = parent.width / divide;
+    const codey = Math.abs(Math.trunc((lat - parent.originLat) / h));
+    const codex = Math.abs(Math.trunc((lng - parent.originLng) / w));
+    let end = `${codey}${codex}`;
+    if (divide == 2) {
+        // south-west=1, south-east=2, north-west=3, north-east=4
+        end = `${2 * codey + codex + 1}`;
+    }
+    const code = `${parent.code}${end}`;
+    const [signX, signY] = (0, code_1.parseFirstDigit)(code);
+    const originLat = parent.originLat + codey * h * signY;
+    const originLng = parent.originLng + codex * w * signX;
     return {
         originLng: originLng,
         originLat: originLat,
@@ -25,62 +38,69 @@ const toGrid = (grid, level, divide) => {
         code: code
     };
 };
-const toLv1 = (code) => {
-    const [signX, signY, z] = (0, model_1.parseFirstDigit)(code);
-    const y = Number(code.substring(1, 4));
-    const x = Number(code.substring(4, 6));
-    const originLat = y * model_1.Unit.lat * signY;
-    const originLng = (x * model_1.Unit.lng + 100 * z) * signX;
+const toLv1 = (lng, lat) => {
+    const o = (0, exports.toFirstDigit)(lng, lat);
+    const h = model_1.Unit.lat;
+    const p = Math.trunc(Math.abs(lat) / h);
+    const padP = String(p).padStart(3, '0');
+    // Extract the last two digits of the integer part
+    const u = Math.trunc(Math.abs(lng)) % 100;
+    const padU = String(u).padStart(2, '0');
+    const code = `${o}${padP}${padU}`;
+    const originLat = Math.trunc(lat / h) * h;
+    const originLng = Math.trunc(lng);
     return {
         originLng: originLng,
         originLat: originLat,
         width: model_1.Unit.lng,
-        height: model_1.Unit.lat,
+        height: h,
         code: code
     };
 };
-const toLv2 = (code) => {
-    const lv1 = toLv1(code);
-    return toGrid(lv1, 2, 8);
+const toLv2 = (lng, lat) => {
+    const lv1 = toLv1(lng, lat);
+    return divideGrid(lng, lat, lv1, 8);
 };
-const toLv3 = (code) => {
-    const lv2 = toLv2(code);
-    return toGrid(lv2, 3, 10);
+const toLv3 = (lng, lat) => {
+    const lv2 = toLv2(lng, lat);
+    return divideGrid(lng, lat, lv2, 10);
 };
-const toLv4 = (code) => {
-    const lv3 = toLv3(code);
-    return toGrid(lv3, 4, 2);
+const toLv4 = (lng, lat) => {
+    const lv3 = toLv3(lng, lat);
+    return divideGrid(lng, lat, lv3, 2);
 };
-const toLv5 = (code) => {
-    const lv4 = toLv4(code);
-    return toGrid(lv4, 5, 2);
+const toLv5 = (lng, lat) => {
+    const lv4 = toLv4(lng, lat);
+    return divideGrid(lng, lat, lv4, 2);
 };
-const toLv6 = (code) => {
-    const lv5 = toLv5(code);
-    return toGrid(lv5, 6, 2);
+const toLv6 = (lng, lat) => {
+    const lv5 = toLv5(lng, lat);
+    return divideGrid(lng, lat, lv5, 2);
 };
-const toExt25 = (code) => {
-    const lv6 = toLv6(code);
-    return toGrid(lv6, 7, 5);
+const toExt25 = (lng, lat) => {
+    const lv6 = toLv6(lng, lat);
+    return divideGrid(lng, lat, lv6, 5);
 };
-const toExt12 = (code) => {
-    const ext25 = toExt25(code);
-    return toGrid(ext25, 8, 2);
+const toExt12 = (lng, lat) => {
+    const ext25 = toExt25(lng, lat);
+    return divideGrid(lng, lat, ext25, 2);
 };
-const toExt5 = (code) => {
-    const ext25 = toExt25(code);
-    return toGrid(ext25, 9, 5);
+const toExt5 = (lng, lat) => {
+    const ext25 = toExt25(lng, lat);
+    return divideGrid(lng, lat, ext25, 5);
 };
 /**
- * Returns longitude and latitude from the grid square code.
+ * Returns the grid square code from longitude and latitude.
  *
- * @param code - the grid square code
- * @param anchorX - anchor point of longitude
- * @param anchorY - anchor point of latitude
- * @returns Point object
+ * @param lng - longitude
+ * @param lat - latitude
+ * @param level - zoom level 1 to 9
+ * @returns the grid square code
  */
-const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
-    code = code.replaceAll('-', '');
+const pointToCode = (lng, lat, level) => {
+    if (level < 1 || level > 9) {
+        throw new Error(`Unsupported level: ${level}`);
+    }
     const funcs = {
         1: toLv1,
         2: toLv2,
@@ -92,60 +112,7 @@ const toPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
         8: toExt12,
         9: toExt5
     };
-    const level = (0, model_1.toLevel)(code);
     const func = funcs[level];
-    const g = func(code);
-    const digit = 14;
-    const originLng = Math.trunc(g.originLng * Math.pow(10, digit)) / Math.pow(10, digit);
-    const originLat = Math.trunc(g.originLat * Math.pow(10, digit)) / Math.pow(10, digit);
-    const [signX, signY] = (0, model_1.parseFirstDigit)(code);
-    if (signX < 0) {
-        anchorX -= 1;
-    }
-    if (signY < 0) {
-        anchorY -= 1;
-    }
-    const lng = originLng + anchorX * g.width;
-    const lat = originLat + anchorY * g.height;
-    return { lng: lng, lat: lat };
+    return func(lng, lat).code;
 };
-exports.toPoint = toPoint;
-/**
- * Returns longitude and latitude from the jis grid square code.
- *
- * @param code - the jis grid square code
- * @param anchorX - anchor point of longitude
-   @param anchorY - anchor point of latitude
- * @returns Point object
- */
-const jisCodeToPoint = (code, anchorX = 0.0, anchorY = 0.0) => {
-    return (0, exports.toPoint)(`20${code}`, anchorX, anchorY);
-};
-exports.jisCodeToPoint = jisCodeToPoint;
-/**
- * Returns bounding box from the grid square code.
- *
- * @param code - the grid square code
- * @returns Bbox object
- */
-const toBbox = (code) => {
-    const ws = (0, exports.toPoint)(code, 0, 0);
-    const en = (0, exports.toPoint)(code, 1, 1);
-    return {
-        west: ws.lng,
-        south: ws.lat,
-        east: en.lng,
-        north: en.lat
-    };
-};
-exports.toBbox = toBbox;
-/**
- * Returns bounding box from the jis grid square code.
- *
- * @param code - the jis grid square code
- * @returns Bbox object
- */
-const jisCodeToBbox = (code) => {
-    return (0, exports.toBbox)(`20${code}`);
-};
-exports.jisCodeToBbox = jisCodeToBbox;
+exports.pointToCode = pointToCode;

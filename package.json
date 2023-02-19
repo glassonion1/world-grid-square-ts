@@ -1,7 +1,7 @@
 {
   "name": "world-grid-square",
-  "version": "0.1.5",
-  "description": "",
+  "version": "0.2.1",
+  "description": "The world grid square is extension of JIS X0410 worldwide.This library is utilities for the world grid square.",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -22,7 +22,8 @@
     "grid",
     "longitude",
     "latitude",
-    "geocode"
+    "geocode",
+    "jismesh"
   ],
   "author": "glassonion1",
   "homepage": "https://github.com/glassonion1/world-grid-square-ts",

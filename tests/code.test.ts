@@ -162,120 +162,120 @@ const cases = [
 describe('run tests', () => {
   cases.forEach((c) => {
     it(c.label, () => {
-      expect(wgs.toPoint(c.code)).toStrictEqual(c.ws)
-      expect(wgs.toPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
+      expect(wgs.codeToPoint(c.code)).toStrictEqual(c.ws)
+      expect(wgs.codeToPoint(c.code, 0.5, 0.5)).toStrictEqual(c.center)
       expect(c.ws.lng < c.center.lng).toBeTruthy()
       expect(c.ws.lat < c.center.lat).toBeTruthy()
     })
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: 77.20625,
       south: 28.61458333333333,
       east: 77.2078125,
       north: 28.615624999999994
     }
-    expect(wgs.toBbox('1042777136431')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('1042777136431')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: 135.7578125,
       south: 34.9875,
       east: 135.759375,
       north: 34.98854166666666
     }
-    expect(wgs.toBbox('2052353680412')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('2052353680412')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: 139.69818750000002,
       south: 35.664,
       east: 139.69825000000003,
       north: 35.66404166666667
     }
-    expect(wgs.toBbox('20533935954232411')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('20533935954232411')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -1,
       south: 51.33333333333333,
       east: 0,
       north: 51.99999999999999
     }
-    expect(wgs.toBbox('307700')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('307700')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -0.125,
       south: 51.41666666666666,
       east: 0,
       north: 51.49999999999999
     }
-    expect(wgs.toBbox('30770010')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('30770010')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -0.11249999999999999,
       south: 51.49479166666666,
       east: -0.1109375,
       north: 51.49583333333332
     }
-    expect(wgs.toBbox('3077001098244')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('3077001098244')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -122.3140625,
       south: 37.7125,
       east: -122.3125,
       north: 37.713541666666664
     }
-    expect(wgs.toBbox('4056224255311')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('4056224255311')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: 18.39999999999999,
       south: -34.02291666666667,
       east: 18.40156249999999,
       north: -34.021875
     }
-    expect(wgs.toBbox('5051180322313')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('5051180322313')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: 151.290625,
       south: -34.059374999999996,
       east: 151.2921875,
       north: -34.05833333333333
     }
-    expect(wgs.toBbox('6051510273121')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('6051510273121')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -43.12343749999999,
       south: -23.006249999999994,
       east: -43.12187499999999,
       north: -23.00520833333333
     }
-    expect(wgs.toBbox('7034434009423')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('7034434009423')).toStrictEqual(bbox)
   })
 
-  it('test toBbox', () => {
+  it('test codeToBbox', () => {
     const bbox = {
       west: -149.55937500000002,
       south: -17.552083333333325,
       east: -149.5578125,
       north: -17.55104166666666
     }
-    expect(wgs.toBbox('8026492464214')).toStrictEqual(bbox)
+    expect(wgs.codeToBbox('8026492464214')).toStrictEqual(bbox)
   })
 })

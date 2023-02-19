@@ -1,4 +1,4 @@
-import { toFirstDigit } from '../src/code'
+import { toFirstDigit } from '../src/point'
 
 describe('run tests', () => {
   it('test range -180 < lng <= 180, -90 <= lat <= 90', () => {

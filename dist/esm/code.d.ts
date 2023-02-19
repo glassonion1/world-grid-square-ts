@@ -1,19 +1,20 @@
-export declare const toFirstDigit: (lng: number, lat: number) => number;
+import { Point, Bbox } from './model';
+export declare const parseFirstDigit: (code: string) => number[];
+export declare const codeToLevel: (code: string) => number;
 /**
- * Returns the grid square code from longitude and latitude.
+ * Returns longitude and latitude from the grid square code.
  *
- * @param lng - longitude
- * @param lat - latitude
- * @param level - zoom level 1 to 9
- * @returns the grid square code
+ * @param code - the grid square code
+ * @param anchorX - anchor point of longitude
+ * @param anchorY - anchor point of latitude
+ * @returns Point object
  */
-export declare const toCode: (lng: number, lat: number, level: number) => string;
+export declare const codeToPoint: (code: string, anchorX?: number, anchorY?: number) => Point;
 /**
- * Returns the jis grid square code from longitude and latitude.
+ * Returns bounding box from the grid square code.
  *
- * @param lng - longitude
- * @param lat - latitude
- * @returns the jis grid square code
+ * @param code - the grid square code
+ * @returns Bbox object
  */
-export declare const toJisCode: (lng: number, lat: number, level: number) => string;
+export declare const codeToBbox: (code: string) => Bbox;
 //# sourceMappingURL=code.d.ts.map

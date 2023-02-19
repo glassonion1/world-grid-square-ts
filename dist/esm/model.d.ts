@@ -42,7 +42,5 @@ export interface Point {
     lng: number;
     lat: number;
 }
-export declare const parseFirstDigit: (code: string) => number[];
 export declare const toLength: (level: number) => number;
-export declare const toLevel: (code: string) => number;
 //# sourceMappingURL=model.d.ts.map

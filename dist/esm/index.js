@@ -1,16 +1,16 @@
-export { toCode } from './code';
-export { toLevel } from './model';
-export { toPoint, toBbox } from './point';
-import { toCode, toJisCode } from './code';
-import { toLevel } from './model';
-import { toPoint, toBbox, jisCodeToPoint, jisCodeToBbox } from './point';
+export { pointToCode } from './point';
+export { codeToPoint, codeToBbox, codeToLevel } from './code';
+export { jisCodeToBbox, jisCodeToPoint, pointToJisCode } from './jis_code';
+import { pointToCode } from './point';
+import { codeToPoint, codeToBbox, codeToLevel } from './code';
+import { jisCodeToBbox, jisCodeToPoint, pointToJisCode } from './jis_code';
 const wgs = {
-    toCode: toCode,
-    toJisCode: toJisCode,
-    toPoint: toPoint,
-    toBbox: toBbox,
+    pointToCode: pointToCode,
+    pointToJisCode: pointToJisCode,
+    codeToPoint: codeToPoint,
+    codeToBbox: codeToBbox,
     jisCodeToPoint: jisCodeToPoint,
     jisCodeToBbox: jisCodeToBbox,
-    toLevel: toLevel
+    codeToLevel: codeToLevel
 };
 export default wgs;

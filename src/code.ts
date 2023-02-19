@@ -1,45 +1,24 @@
-import { Grid, Unit, parseFirstDigit } from './model'
+import { Grid, Point, Bbox, Unit, toLength } from './model'
 
-export const toFirstDigit = (lng: number, lat: number): number => {
-  if (lng <= -180 || 180 < lng) {
-    throw new RangeError(`Longitude is out of bound: ${lng}`)
+const divideGrid = (parent: Grid, level: number, divide: number): Grid => {
+  const len = toLength(level)
+  const code = parent.code
+
+  let y = Number(code[len - 2])
+  let x = Number(code[len - 1])
+  if (divide == 2) {
+    const c = Number(code[len - 1]) - 1
+    y = Math.trunc(c / 2)
+    x = c % 2
   }
 
-  if (lat < -90 || 90 < lat) {
-    throw new RangeError(`Latitude is out of bound: ${lat}`)
-  }
-
-  const x = lng > 0 ? 0 : 1
-  const y = lat > 0 ? 0 : 1
-  const z = -100 < lng && lng <= 100 ? 0 : 1
-
-  return 2 * x + 4 * y + z + 1
-}
-
-const divideGrid = (
-  lng: number,
-  lat: number,
-  parent: Grid,
-  divide: number
-): Grid => {
   const h = parent.height / divide
   const w = parent.width / divide
 
-  const codey = Math.abs(Math.trunc((lat - parent.originLat) / h))
-  const codex = Math.abs(Math.trunc((lng - parent.originLng) / w))
-
-  let end = `${codey}${codex}`
-  if (divide == 2) {
-    // south-west=1, south-east=2, north-west=3, north-east=4
-    end = `${2 * codey + codex + 1}`
-  }
-
-  const code = `${parent.code}${end}`
-
   const [signX, signY] = parseFirstDigit(code)
 
-  const originLat = parent.originLat + codey * h * signY
-  const originLng = parent.originLng + codex * w * signX
+  const originLat = parent.originLat + y * h * signY
+  const originLng = parent.originLng + x * w * signX
 
   return {
     originLng: originLng,
@@ -50,94 +29,115 @@ const divideGrid = (
   }
 }
 
-const toLv1 = (lng: number, lat: number): Grid => {
-  const o = toFirstDigit(lng, lat)
+const toLv1 = (code: string): Grid => {
+  const [signX, signY, z] = parseFirstDigit(code)
 
-  const h = Unit.lat
+  const y = Number(code.substring(1, 4))
+  const x = Number(code.substring(4, 6))
 
-  const p = Math.trunc(Math.abs(lat) / h)
-  const padP = String(p).padStart(3, '0')
-
-  // Extract the last two digits of the integer part
-  const u = Math.trunc(Math.abs(lng)) % 100
-  const padU = String(u).padStart(2, '0')
-
-  const code = `${o}${padP}${padU}`
-
-  const originLat = Math.trunc(lat / h) * h
-  const originLng = Math.trunc(lng)
+  const originLat = y * Unit.lat * signY
+  const originLng = (x * Unit.lng + 100 * z) * signX
 
   return {
     originLng: originLng,
     originLat: originLat,
     width: Unit.lng,
-    height: h,
+    height: Unit.lat,
     code: code
   }
 }
 
-const toLv2 = (lng: number, lat: number): Grid => {
-  const lv1 = toLv1(lng, lat)
-
-  return divideGrid(lng, lat, lv1, 8)
+const toLv2 = (code: string): Grid => {
+  const lv1 = toLv1(code)
+  return divideGrid(lv1, 2, 8)
 }
 
-const toLv3 = (lng: number, lat: number): Grid => {
-  const lv2 = toLv2(lng, lat)
-
-  return divideGrid(lng, lat, lv2, 10)
+const toLv3 = (code: string): Grid => {
+  const lv2 = toLv2(code)
+  return divideGrid(lv2, 3, 10)
 }
 
-const toLv4 = (lng: number, lat: number): Grid => {
-  const lv3 = toLv3(lng, lat)
-
-  return divideGrid(lng, lat, lv3, 2)
+const toLv4 = (code: string): Grid => {
+  const lv3 = toLv3(code)
+  return divideGrid(lv3, 4, 2)
 }
 
-const toLv5 = (lng: number, lat: number): Grid => {
-  const lv4 = toLv4(lng, lat)
-
-  return divideGrid(lng, lat, lv4, 2)
+const toLv5 = (code: string): Grid => {
+  const lv4 = toLv4(code)
+  return divideGrid(lv4, 5, 2)
 }
 
-const toLv6 = (lng: number, lat: number): Grid => {
-  const lv5 = toLv5(lng, lat)
-
-  return divideGrid(lng, lat, lv5, 2)
+const toLv6 = (code: string): Grid => {
+  const lv5 = toLv5(code)
+  return divideGrid(lv5, 6, 2)
 }
 
-const toExt25 = (lng: number, lat: number): Grid => {
-  const lv6 = toLv6(lng, lat)
-
-  return divideGrid(lng, lat, lv6, 5)
+const toExt25 = (code: string): Grid => {
+  const lv6 = toLv6(code)
+  return divideGrid(lv6, 7, 5)
 }
 
-const toExt12 = (lng: number, lat: number): Grid => {
-  const ext25 = toExt25(lng, lat)
-
-  return divideGrid(lng, lat, ext25, 2)
+const toExt12 = (code: string): Grid => {
+  const ext25 = toExt25(code)
+  return divideGrid(ext25, 8, 2)
 }
 
-const toExt5 = (lng: number, lat: number): Grid => {
-  const ext25 = toExt25(lng, lat)
+const toExt5 = (code: string): Grid => {
+  const ext25 = toExt25(code)
+  return divideGrid(ext25, 9, 5)
+}
 
-  return divideGrid(lng, lat, ext25, 5)
+export const parseFirstDigit = (code: string): number[] => {
+  const o = Number(code[0])
+  const z = (o - 1) % 2
+  const x = ((o - z - 1) / 2) % 2
+  const y = (o - 2 * x - z - 1) / 4
+
+  const signX = 1 - 2 * x
+  const signY = 1 - 2 * y
+
+  return [signX, signY, z]
+}
+
+export const codeToLevel = (code: string): number => {
+  switch (code.length) {
+    case 6:
+      return 1
+    case 8:
+      return 2
+    case 10:
+      return 3
+    case 11:
+      return 4
+    case 12:
+      return 5
+    case 13:
+      return 6
+    case 15:
+      return 7
+    case 16:
+      return 8
+    case 17:
+      return 9
+  }
+  throw new Error(`Unsupported code: ${code}`)
 }
 
 /**
- * Returns the grid square code from longitude and latitude.
+ * Returns longitude and latitude from the grid square code.
  *
- * @param lng - longitude
- * @param lat - latitude
- * @param level - zoom level 1 to 9
- * @returns the grid square code
+ * @param code - the grid square code
+ * @param anchorX - anchor point of longitude
+ * @param anchorY - anchor point of latitude
+ * @returns Point object
  */
-export const toCode = (lng: number, lat: number, level: number): string => {
-  if (level < 1 || level > 9) {
-    throw new Error(`Unsupported level: ${level}`)
-  }
-
-  const funcs: { [key: number]: (lng: number, lat: number) => Grid } = {
+export const codeToPoint = (
+  code: string,
+  anchorX: number = 0.0,
+  anchorY: number = 0.0
+): Point => {
+  code = code.replaceAll('-', '')
+  const funcs: { [key: number]: (code: string) => Grid } = {
     1: toLv1,
     2: toLv2,
     3: toLv3,
@@ -149,26 +149,48 @@ export const toCode = (lng: number, lat: number, level: number): string => {
     9: toExt5
   }
 
+  const level = codeToLevel(code)
+
   const func = funcs[level]
 
-  return func(lng, lat).code
+  const g = func(code)
+
+  const digit = 14
+  const originLng =
+    Math.trunc(g.originLng * Math.pow(10, digit)) / Math.pow(10, digit)
+  const originLat =
+    Math.trunc(g.originLat * Math.pow(10, digit)) / Math.pow(10, digit)
+
+  const [signX, signY] = parseFirstDigit(code)
+
+  if (signX < 0) {
+    anchorX -= 1
+  }
+
+  if (signY < 0) {
+    anchorY -= 1
+  }
+
+  const lng = originLng + anchorX * g.width
+  const lat = originLat + anchorY * g.height
+
+  return { lng: lng, lat: lat }
 }
 
 /**
- * Returns the jis grid square code from longitude and latitude.
+ * Returns bounding box from the grid square code.
  *
- * @param lng - longitude
- * @param lat - latitude
- * @returns the jis grid square code
+ * @param code - the grid square code
+ * @returns Bbox object
  */
-export const toJisCode = (lng: number, lat: number, level: number): string => {
-  if (lng < 100 || 180 <= lng) {
-    throw new RangeError(`Longitude is out of bound: ${lng}`)
-  }
+export const codeToBbox = (code: string): Bbox => {
+  const ws = codeToPoint(code, 0, 0)
+  const en = codeToPoint(code, 1, 1)
 
-  if (lat < 0 || 66.66 <= lat) {
-    throw new RangeError(`Latitude is out of bound: ${lat}`)
+  return {
+    west: ws.lng,
+    south: ws.lat,
+    east: en.lng,
+    north: en.lat
   }
-
-  return toCode(lng, lat, level).slice(2)
 }

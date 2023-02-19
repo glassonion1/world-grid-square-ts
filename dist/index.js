@@ -1,23 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toBbox = exports.toPoint = exports.toLevel = exports.toCode = void 0;
-var code_1 = require("./code");
-Object.defineProperty(exports, "toCode", { enumerable: true, get: function () { return code_1.toCode; } });
-var model_1 = require("./model");
-Object.defineProperty(exports, "toLevel", { enumerable: true, get: function () { return model_1.toLevel; } });
+exports.pointToJisCode = exports.jisCodeToPoint = exports.jisCodeToBbox = exports.codeToLevel = exports.codeToBbox = exports.codeToPoint = exports.pointToCode = void 0;
 var point_1 = require("./point");
-Object.defineProperty(exports, "toPoint", { enumerable: true, get: function () { return point_1.toPoint; } });
-Object.defineProperty(exports, "toBbox", { enumerable: true, get: function () { return point_1.toBbox; } });
-const code_2 = require("./code");
-const model_2 = require("./model");
+Object.defineProperty(exports, "pointToCode", { enumerable: true, get: function () { return point_1.pointToCode; } });
+var code_1 = require("./code");
+Object.defineProperty(exports, "codeToPoint", { enumerable: true, get: function () { return code_1.codeToPoint; } });
+Object.defineProperty(exports, "codeToBbox", { enumerable: true, get: function () { return code_1.codeToBbox; } });
+Object.defineProperty(exports, "codeToLevel", { enumerable: true, get: function () { return code_1.codeToLevel; } });
+var jis_code_1 = require("./jis_code");
+Object.defineProperty(exports, "jisCodeToBbox", { enumerable: true, get: function () { return jis_code_1.jisCodeToBbox; } });
+Object.defineProperty(exports, "jisCodeToPoint", { enumerable: true, get: function () { return jis_code_1.jisCodeToPoint; } });
+Object.defineProperty(exports, "pointToJisCode", { enumerable: true, get: function () { return jis_code_1.pointToJisCode; } });
 const point_2 = require("./point");
+const code_2 = require("./code");
+const jis_code_2 = require("./jis_code");
 const wgs = {
-    toCode: code_2.toCode,
-    toJisCode: code_2.toJisCode,
-    toPoint: point_2.toPoint,
-    toBbox: point_2.toBbox,
-    jisCodeToPoint: point_2.jisCodeToPoint,
-    jisCodeToBbox: point_2.jisCodeToBbox,
-    toLevel: model_2.toLevel
+    pointToCode: point_2.pointToCode,
+    pointToJisCode: jis_code_2.pointToJisCode,
+    codeToPoint: code_2.codeToPoint,
+    codeToBbox: code_2.codeToBbox,
+    jisCodeToPoint: jis_code_2.jisCodeToPoint,
+    jisCodeToBbox: jis_code_2.jisCodeToBbox,
+    codeToLevel: code_2.codeToLevel
 };
 exports.default = wgs;

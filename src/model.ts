@@ -46,18 +46,6 @@ export interface Point {
   lat: number
 }
 
-export const parseFirstDigit = (code: string): number[] => {
-  const o = Number(code[0])
-  const z = (o - 1) % 2
-  const x = ((o - z - 1) / 2) % 2
-  const y = (o - 2 * x - z - 1) / 4
-
-  const signX = 1 - 2 * x
-  const signY = 1 - 2 * y
-
-  return [signX, signY, z]
-}
-
 export const toLength = (level: number): number => {
   switch (level) {
     case 1:
@@ -80,28 +68,4 @@ export const toLength = (level: number): number => {
       return 17
   }
   throw new Error(`Unsupported level: ${level}`)
-}
-
-export const toLevel = (code: string): number => {
-  switch (code.length) {
-    case 6:
-      return 1
-    case 8:
-      return 2
-    case 10:
-      return 3
-    case 11:
-      return 4
-    case 12:
-      return 5
-    case 13:
-      return 6
-    case 15:
-      return 7
-    case 16:
-      return 8
-    case 17:
-      return 9
-  }
-  throw new Error(`Unsupported code: ${code}`)
 }
