@@ -60,3 +60,7 @@ const point = wgs.jisCodeToPoint('53393599212')
 // 139.7453125, 35.65833333333333
 console.log(point)
 ```
+
+## Demo using map
+Here is a demo that actually draws the world grid square on the map using this library.  
+https://tools.9revolution9.com/geo/geocode/
