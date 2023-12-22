@@ -1,4 +1,4 @@
-import { Grid, Point, Bbox, Unit, toLength } from './model'
+import { Grid, Point, Bbox, Unit, toLength } from './types'
 
 const divideGrid = (parent: Grid, level: number, divide: number): Grid => {
   const len = toLength(level)

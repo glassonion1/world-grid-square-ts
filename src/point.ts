@@ -1,5 +1,5 @@
 import { parseFirstDigit } from './code'
-import { Grid, Unit } from './model'
+import { Grid, Unit } from './types'
 
 export const toFirstDigit = (lng: number, lat: number): number => {
   if (lng <= -180 || 180 < lng) {

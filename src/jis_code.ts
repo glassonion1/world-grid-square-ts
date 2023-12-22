@@ -1,5 +1,5 @@
 import { codeToBbox, codeToPoint } from './code'
-import { Bbox, Point } from './model'
+import { Bbox, Point } from './types'
 import { pointToCode } from './point'
 
 /**
