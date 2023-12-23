@@ -25,6 +25,10 @@ or
 ```
 $ yarn add world-grid-square
 ```
+or
+```
+$ pnpm add world-grid-square
+```
 
 ## Usage
 from longitude and latitude to code
