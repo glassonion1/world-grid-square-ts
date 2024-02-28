@@ -1,4 +1,4 @@
-import wgs from '../src'
+import { wgs } from '../src'
 
 describe('run tests', () => {
   const newDelhi = [77.2300193, 28.5645549]

@@ -1,5 +1,6 @@
-import { resolve } from 'path'
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,8 +15,9 @@ export default defineConfig({
       entry: resolve(__dirname, 'src', 'index.ts'),
       formats: ['es', 'cjs'],
       fileName: (ext: string) => `index.${ext}.js`
-    },
-    target: 'esnext',
-    sourcemap: true
+    }
+  },
+  test: {
+    globals: true
   }
 })

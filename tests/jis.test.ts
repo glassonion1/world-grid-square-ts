@@ -1,4 +1,4 @@
-import wgs from '../src'
+import { wgs } from '../src'
 
 const cases = [
   {

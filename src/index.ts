@@ -7,7 +7,7 @@ import { pointToCode } from './point'
 import { codeToPoint, codeToBbox, codeToLevel } from './code'
 import { jisCodeToBbox, jisCodeToPoint, pointToJisCode } from './jis_code'
 
-const wgs = {
+export const wgs = {
   pointToCode: pointToCode,
   pointToJisCode: pointToJisCode,
   codeToPoint: codeToPoint,
@@ -16,5 +16,3 @@ const wgs = {
   jisCodeToBbox: jisCodeToBbox,
   codeToLevel: codeToLevel
 } as const
-
-export default wgs
