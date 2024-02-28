@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/global-mercator.svg)](https://badge.fury.io/js/world-grid-square)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/glassonion1/world-grid-square-ts/main/LICENSE)
 
-The world grid square is extension of JIS X0410 worldwide.This library is utilities for the world grid square.
+The world grid square is extension of JIS X0410(a.k.a Japan Mesh Code) worldwide. This library is utilities for the world grid square.
 
 World grid square outlined here: https://www.fttsus.org/worldgrids/en/top-en/
 
@@ -41,7 +41,7 @@ console.log(code)
 ```
 from code to longitude and latitude
 ```ts
-import wgs from 'world-grid-square'
+import { wgs } from 'world-grid-square'
 
 const point = wgs.codeToPoint('2053393599212')
 // 139.7453125, 35.65833333333333
@@ -50,7 +50,7 @@ console.log(point)
 ## Usage for JIS Grid Square
 from longitude and latitude to jis code
 ```ts
-import wgs from 'world-grid-square'
+import { wgs } from 'world-grid-square'
 
 const code = wgs.pointToJisCode(139.745433, 35.658581, 6)
 // 53393599212
@@ -58,7 +58,7 @@ console.log(code)
 ```
 from jis code to longitude and latitude
 ```ts
-import wgs from 'world-grid-square'
+import { wgs } from 'world-grid-square'
 
 const point = wgs.jisCodeToPoint('53393599212')
 // 139.7453125, 35.65833333333333
