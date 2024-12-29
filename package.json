@@ -33,7 +33,7 @@
   "scripts": {
     "lint": "run-s lint:*",
     "lint:lint": "biome lint --write --diagnostic-level=error src/*",
-    "lint:format": "biome check --write --linter-enabled=false src/*",
+    "lint:prettier": "prettier --write --ignore-path .gitignore './src/*.ts'",
     "dev": "vite",
     "prebuild": "rimraf dist",
     "build": "run-p build:*",
