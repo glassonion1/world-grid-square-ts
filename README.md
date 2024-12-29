@@ -33,7 +33,7 @@ $ pnpm add world-grid-square
 ## Usage
 from longitude and latitude to code
 ```ts
-import wgs from 'world-grid-square'
+import { wgs } from 'world-grid-square'
 
 const code = wgs.pointToCode(139.745433, 35.658581, 6)
 // 2053393599212
