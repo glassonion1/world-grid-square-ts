@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node10",
-    "lib": ["esnext"],
+    "lib": ["esnext", "es2021"],
     "useDefineForClassFields": true,
     "allowJs": false,
     "strict": true,

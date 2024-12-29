@@ -1,6 +1,6 @@
 {
   "name": "world-grid-square",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "The world grid square is extension of JIS X0410 worldwide.This library is utilities for the world grid square.",
   "keywords": [
     "grid",
@@ -32,8 +32,8 @@
   ],
   "scripts": {
     "lint": "run-s lint:*",
-    "lint:eslint": "eslint . --ext .ts,.tsx --fix",
-    "lint:prettier": "prettier --write --ignore-path .gitignore './src/*.ts'",
+    "lint:lint": "biome lint --write --diagnostic-level=error src/*",
+    "lint:format": "biome check --write --linter-enabled=false src/*",
     "dev": "vite",
     "prebuild": "rimraf dist",
     "build": "run-p build:*",
@@ -42,20 +42,16 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@types/node": "^20.11.21",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.33.2",
-    "npm-run-all2": "^6.1.2",
-    "prettier": "^3.2.5",
-    "rimraf": "^5.0.5",
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "npm-run-all2": "^7.0.2",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "tsc-alias": "^1.8.8",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.4",
-    "vitest": "^1.3.1"
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6",
+    "vitest": "^2.1.8"
   }
 }
